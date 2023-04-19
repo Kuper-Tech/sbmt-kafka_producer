@@ -1,0 +1,6 @@
+inherit_gem:
+  sbmt-dev: config/rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.7
+  TargetRailsVersion: 5.1
