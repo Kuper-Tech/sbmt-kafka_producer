@@ -32,6 +32,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 5.1"
   spec.add_dependency "zeitwerk", "~> 2.6"
+  spec.add_dependency "sbmt-waterdrop", ">= 2.5.1"
+  spec.add_dependency "connection_pool"
 
   spec.add_development_dependency "appraisal", ">= 2.4"
   spec.add_development_dependency "bundler", ">= 2.3"

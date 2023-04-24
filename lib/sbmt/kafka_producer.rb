@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 require "zeitwerk"
+require "connection_pool"
 
 module Sbmt
   module KafkaProducer
-    class Error < StandardError; end
-    # Your code goes here...
+    class << self
+      def deliver
+        true
+      end
+
+      def kafka
+        {}
+      end
+    end
   end
 end
 

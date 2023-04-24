@@ -6,4 +6,5 @@ gemspec
 
 source "https://nexus.sbmt.io/repository/ruby-gems-sbermarket/" do
   gem "sbmt-dev", ">= 0.7.0"
+  gem "sbmt-waterdrop", ">= 2.5.1"
 end
