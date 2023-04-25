@@ -14,6 +14,8 @@ module Sbmt
         {}
       end
     end
+
+    class Error < StandardError; end
   end
 end
 
