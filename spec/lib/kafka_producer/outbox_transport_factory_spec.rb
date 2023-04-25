@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe "Sbmt::KafkaProducer::OutboxTransportFactory" do
-  subject(:producer) { described_class }
+  subject(:producer) { Sbmt::KafkaProducer::OutboxTransportFactory }
 
   describe ".build" do
     context "when kafka is empty" do

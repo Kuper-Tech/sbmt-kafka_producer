@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe "Sbmt::KafkaProducer::BaseProducer" do
-  subject(:base_producer) { described_class.new(topic: topic, kafka: kafka) }
+  subject(:base_producer) { Sbmt::KafkaProducer::BaseProducer.new(topic: topic, kafka: kafka) }
 
   let(:topic) { "test-topic" }
   let(:payload) { {key: "value"} }
