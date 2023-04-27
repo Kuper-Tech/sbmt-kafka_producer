@@ -1,20 +1,17 @@
 # frozen_string_literal: true
 
-require "zeitwerk"
 require "connection_pool"
+require "dry-initializer"
+require "zeitwerk"
+require "rails"
 
 module Sbmt
   module KafkaProducer
     class << self
-      def deliver
-        true
-      end
-
-      def kafka
-        {}
+      def logger
+        @logger ||= Logger.new
       end
     end
-
     class Error < StandardError; end
   end
 end

@@ -3,15 +3,13 @@
 module Sbmt
   module KafkaProducer
     class BaseProducer
-      def initialize(topic:, kafka: {})
-        @topic = topic
-        @pool = OutboxTransportFactory.build(kafka: kafka)
-      end
+      extend Dry::Initializer
 
-      def call(item, payload)
-        @pool.with do |client|
-          client.produce_sync(topic: @topic, item: item, payload: payload)
-        end
+      option :client, default: -> { KafkaClientFactory.default_client }
+      option :topic
+
+      def publish(payload, options = {})
+        client.produce_sync(payload: payload, **options.merge(topic: topic))
       end
     end
   end
