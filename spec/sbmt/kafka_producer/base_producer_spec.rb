@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "rails_helper"
-
 describe Sbmt::KafkaProducer::BaseProducer do
   let(:client) { instance_double(Sbmt::WaterDrop::Producer) }
   let(:topic) { "test_topic" }
