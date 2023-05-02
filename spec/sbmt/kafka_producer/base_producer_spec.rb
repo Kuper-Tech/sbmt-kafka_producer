@@ -10,7 +10,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
     allow(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:default_client).and_return(client)
   end
 
-  describe "#publish" do
+  describe "#sync_publish" do
     let(:options) { {seed_brokers: "kafka://kafka:9092"} }
 
     context "when payload is successfully delivered" do
@@ -23,7 +23,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
       end
 
       it "produces the payload via the client and returns true" do
-        expect(producer.publish(payload, options)).to be(true)
+        expect(producer.sync_publish(payload, options)).to be(true)
       end
     end
 
@@ -34,7 +34,36 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
       it "logs the error and returns false" do
         expect(producer).to receive(:log_error).once
-        expect(producer.publish(payload, options)).to be(false)
+        expect(producer.sync_publish(payload, options)).to be(false)
+      end
+    end
+  end
+
+  describe "#async_publish" do
+    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
+
+    context "when payload is successfully delivered" do
+      before do
+        allow(client).to receive(:produce_async).with(
+          payload: payload,
+          topic: "test_topic",
+          seed_brokers: "kafka://kafka:9092"
+        ).and_return(true)
+      end
+
+      it "produces the payload via the client and returns true" do
+        expect(producer.async_publish(payload, options)).to be(true)
+      end
+    end
+
+    context "when delivery fails with Kafka::DeliveryFailed" do
+      before do
+        allow(client).to receive(:produce_async).and_raise(Sbmt::WaterDrop::Errors::ProduceError)
+      end
+
+      it "logs the error and returns false" do
+        expect(producer).to receive(:log_error).once
+        expect(producer.async_publish(payload, options)).to be(false)
       end
     end
   end

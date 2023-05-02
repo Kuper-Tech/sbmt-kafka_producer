@@ -13,16 +13,16 @@ describe Sbmt::KafkaProducer::OutboxProducer do
   end
 
   describe "#call" do
-    it "calls publish with payload and outbox_item options" do
-      expect_any_instance_of(described_class).to receive(:publish).with(payload, partition: 0)
+    it "calls sync_publish with payload and outbox_item options" do
+      expect_any_instance_of(described_class).to receive(:sync_publish).with(payload, partition: 0)
       outbox_producer.call(outbox_item, payload)
     end
   end
 
-  describe "#publish" do
+  describe "#sync_publish" do
     it "calls client.produce_sync with payload and merged options" do
       expect(client).to receive(:produce_sync).with(payload: payload, topic: topic, partition: 0)
-      outbox_producer.publish(payload, partition: 0)
+      outbox_producer.sync_publish(payload, partition: 0)
     end
   end
 

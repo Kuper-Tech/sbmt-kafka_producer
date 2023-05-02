@@ -11,9 +11,20 @@ module Sbmt
       option :client, default: -> { KafkaClientFactory.default_client }
       option :topic
 
-      def publish(payload, options = {})
+      def sync_publish(payload, options = {})
         around_publish do
           client.produce_sync(payload: payload, **options.merge(topic: topic))
+        end
+
+        true
+      rescue Sbmt::WaterDrop::Errors::ProduceError => e
+        log_error(e)
+        false
+      end
+
+      def async_publish(payload, options = {})
+        around_publish do
+          client.produce_async(payload: payload, **options.merge(topic: topic))
         end
 
         true
