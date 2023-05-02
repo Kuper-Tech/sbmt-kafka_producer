@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Sbmt::KafkaProducer::BaseProducer do
+  let(:producer) { described_class.new(client: client, topic: topic) }
   let(:client) { instance_double(Sbmt::WaterDrop::Producer) }
   let(:topic) { "test_topic" }
   let(:payload) { {message: "payload"} }
@@ -10,16 +11,31 @@ describe Sbmt::KafkaProducer::BaseProducer do
   end
 
   describe "#publish" do
-    it "calls client.produce_sync with payload and options" do
-      expect(client).to receive(:produce_sync).with(payload: payload, topic: topic)
-      described_class.new(client: client, topic: topic).publish(payload)
+    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
+
+    context "when payload is successfully delivered" do
+      before do
+        allow(client).to receive(:produce_sync).with(
+          payload: payload,
+          topic: "test_topic",
+          seed_brokers: "kafka://kafka:9092"
+        ).and_return(true)
+      end
+
+      it "produces the payload via the client and returns true" do
+        expect(producer.publish(payload, options)).to be(true)
+      end
     end
 
-    it "merges the provided options with topic and calls client.produce_sync" do
-      options = {partition: 0}
+    context "when delivery fails with Kafka::DeliveryFailed" do
+      before do
+        allow(client).to receive(:produce_sync).and_raise(Sbmt::WaterDrop::Errors::ProduceError)
+      end
 
-      expect(client).to receive(:produce_sync).with(payload: payload, topic: topic, partition: 0)
-      described_class.new(client: client, topic: topic).publish(payload, options)
+      it "logs the error and returns false" do
+        expect(producer).to receive(:log_error).once
+        expect(producer.publish(payload, options)).to be(false)
+      end
     end
   end
 
@@ -33,6 +49,24 @@ describe Sbmt::KafkaProducer::BaseProducer do
       producer = described_class.new(client: client, topic: topic)
 
       expect(producer.topic).to eq(topic)
+    end
+  end
+
+  describe "#ignore_kafka_errors?" do
+    context "when IGNORE_KAFKA_ERRORS is set to true" do
+      before { stub_const("#{described_class}::IGNORE_KAFKA_ERRORS", true) }
+
+      it "returns true" do
+        expect(producer.send(:ignore_kafka_errors?)).to be(true)
+      end
+    end
+
+    context "when IGNORE_KAFKA_ERRORS is set to false" do
+      before { stub_const("#{described_class}::IGNORE_KAFKA_ERRORS", false) }
+
+      it "returns false" do
+        expect(producer.send(:ignore_kafka_errors?)).to be(false)
+      end
     end
   end
 end
