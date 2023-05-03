@@ -4,8 +4,8 @@ require "anyway_config"
 require "active_support/core_ext/module/delegation"
 require "connection_pool"
 require "dry-initializer"
-require "zeitwerk"
 require "sentry-ruby"
+require "zeitwerk"
 
 module Sbmt
   module KafkaProducer
