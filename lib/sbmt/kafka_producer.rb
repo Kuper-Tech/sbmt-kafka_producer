@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/module/delegation"
+require "connection_pool"
+require "dry-initializer"
 require "zeitwerk"
+require "sentry-ruby"
 
 module Sbmt
   module KafkaProducer
+    class << self
+      def logger
+        @logger ||= Logger.new
+      end
+    end
     class Error < StandardError; end
-    # Your code goes here...
   end
 end
 
