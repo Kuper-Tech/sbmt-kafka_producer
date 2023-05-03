@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "anyway_config"
 require "connection_pool"
 require "dry-initializer"
 require "zeitwerk"

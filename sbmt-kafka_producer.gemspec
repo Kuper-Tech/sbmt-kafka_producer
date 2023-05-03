@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "anyway_config", ">= 2.0.0"
   spec.add_dependency "connection_pool"
   spec.add_dependency "dry-initializer", "~> 3.0"
   spec.add_dependency "rails", ">= 5.1"
