@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "active_support/all"
+require "active_support/core_ext/module/delegation"
 require "connection_pool"
 require "dry-initializer"
 require "zeitwerk"
