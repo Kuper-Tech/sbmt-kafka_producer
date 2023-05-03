@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+require "active_support/all"
 require "connection_pool"
 require "dry-initializer"
 require "zeitwerk"
-require "active_support/all"
 require "sentry-ruby"
 
 module Sbmt
