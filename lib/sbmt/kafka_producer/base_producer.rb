@@ -76,6 +76,7 @@ module Sbmt
         return true if ignore_kafka_errors?
 
         logger.error "KAFKA ERROR: #{error.message}\n#{error.backtrace.join("\n")}"
+        Sentry.capture_message(error, level: "error") if ::Sentry.initialized?
       end
     end
   end
