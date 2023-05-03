@@ -39,10 +39,6 @@ module Sbmt
         ::Sbmt::KafkaProducer.logger
       end
 
-      def process_message(_message)
-        raise NotImplementedError, "Implement this in a subclass"
-      end
-
       def around_publish
         with_sentry_transaction { yield }
       end
