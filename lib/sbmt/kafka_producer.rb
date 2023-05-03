@@ -3,7 +3,7 @@
 require "connection_pool"
 require "dry-initializer"
 require "zeitwerk"
-require "rails"
+require "active_support/all"
 require "sentry-ruby"
 
 module Sbmt
