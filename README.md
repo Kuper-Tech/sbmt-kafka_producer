@@ -18,6 +18,33 @@ gem "sbmt-kafka_producer", "~> 0.1.0"
 bundle install
 ```
 
+Создать и настроить конфигурационный файл config/kafka_producer.yml, пример конфига:
+```ruby
+default: &default
+  deliver: true
+  wait_on_queue_full: true
+  max_payload_size: 1000012
+  max_wait_timeout: 5
+  wait_timeout: 0.005
+  ignore_kafka_error: true
+auth:
+  kind: plaintext
+kafka:
+  servers: "kafka:9092"
+  kafka_config:
+    required_acks: -1
+development:
+  <<: *default 
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+staging: &staging
+  <<: *default
+production:
+  <<: *staging
+```
+
 ## Разработка
 
 ### Локальное окружение
