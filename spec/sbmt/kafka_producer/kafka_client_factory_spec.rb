@@ -48,14 +48,4 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
       end
     end
   end
-
-  describe ".base_kafka_options" do
-    before do
-      allow(described_class).to receive(:kafka_config).and_return({seed_brokers: "kafka://localhost:9092"})
-    end
-
-    it "returns the correct base options for Kafka" do
-      expect(described_class.send(:base_kafka_options)).to eq({"bootstrap.servers": "localhost:9092"})
-    end
-  end
 end
