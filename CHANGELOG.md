@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [Unreleased] - 2023-05-04
+
+### Added
+- basic config for producer via gem anyway_config
+
+### Changed
+
+### Fixed
+
 ## [Unreleased] - 2023-05-02
 
 ### Added
