@@ -26,7 +26,7 @@ module Sbmt
 
         def configure_client(kafka_config, kafka_options = {})
           kafka_config.logger = config.logger_class.classify.constantize.new
-          kafka_config.kafka = config.to_kafka_options.merge(kafka_options)
+          kafka_config.kafka = config.to_kafka_options.merge(kafka_options).symbolize_keys
 
           kafka_config.deliver = config.deliver if config.deliver.present?
           kafka_config.wait_on_queue_full = config.wait_on_queue_full if config.wait_on_queue_full.present?
