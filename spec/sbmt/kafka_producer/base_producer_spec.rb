@@ -80,22 +80,4 @@ describe Sbmt::KafkaProducer::BaseProducer do
       expect(producer.topic).to eq(topic)
     end
   end
-
-  describe "#ignore_kafka_errors?" do
-    context "when IGNORE_KAFKA_ERRORS is set to true" do
-      before { stub_const("#{described_class}::IGNORE_KAFKA_ERRORS", true) }
-
-      it "returns true" do
-        expect(producer.send(:ignore_kafka_errors?)).to be(true)
-      end
-    end
-
-    context "when IGNORE_KAFKA_ERRORS is set to false" do
-      before { stub_const("#{described_class}::IGNORE_KAFKA_ERRORS", false) }
-
-      it "returns false" do
-        expect(producer.send(:ignore_kafka_errors?)).to be(false)
-      end
-    end
-  end
 end

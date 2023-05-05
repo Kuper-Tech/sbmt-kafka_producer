@@ -5,9 +5,6 @@ module Sbmt
     class BaseProducer
       extend Dry::Initializer
 
-      # TODO: will be configured in DEX-1075
-      IGNORE_KAFKA_ERRORS = true
-
       option :client, default: -> { KafkaClientFactory.default_client }
       option :topic
 
@@ -65,7 +62,7 @@ module Sbmt
       end
 
       def ignore_kafka_errors?
-        IGNORE_KAFKA_ERRORS.to_s == "true"
+        config.ignore_kafka_error.to_s == "true"
       end
 
       def log_error(error)
@@ -73,6 +70,10 @@ module Sbmt
 
         logger.error "KAFKA ERROR: #{error.message}\n#{error.backtrace.join("\n")}"
         Sentry.capture_message(error, level: "error") if ::Sentry.initialized?
+      end
+
+      def config
+        Configs::Producer
       end
     end
   end

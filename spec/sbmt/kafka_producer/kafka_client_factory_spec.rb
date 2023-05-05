@@ -23,20 +23,20 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
     end
   end
 
-  describe ".configure_producer" do
+  describe ".configure_client" do
     let(:logger) { instance_double(Logger) }
 
     before do
       allow(Sbmt::KafkaProducer).to receive(:logger).and_return(logger)
     end
 
-    it "configures the producer with the correct options" do
+    it "configures the client with the correct options" do
       seed_brokers = "kafka://localhost:9092"
       connect_timeout = "10s"
 
       ConnectionPool::Wrapper.new do |wrapper|
         wrapper.with do |producer|
-          configure_producer(producer)
+          configure_client(producer)
           expect(producer.config.deliver).to be(true)
           expect(producer.config.logger).to eq(logger)
           expect(producer.config.wait_on_queue_full).to be(false)
@@ -46,16 +46,6 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
           )
         end
       end
-    end
-  end
-
-  describe ".base_kafka_options" do
-    before do
-      allow(described_class).to receive(:kafka_config).and_return({seed_brokers: "kafka://localhost:9092"})
-    end
-
-    it "returns the correct base options for Kafka" do
-      expect(described_class.send(:base_kafka_options)).to eq({"bootstrap.servers": "localhost:9092"})
     end
   end
 end

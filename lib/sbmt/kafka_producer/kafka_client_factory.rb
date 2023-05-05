@@ -3,15 +3,11 @@
 module Sbmt
   module KafkaProducer
     class KafkaClientFactory
-      # TODO: will be configured in DEX-1075
-      PODUCER_DELIVER = true
-      PRODUCER_WAIT_ON_QUEUE_FULL = false
-
       class << self
         def default_client
           @default_client ||= ConnectionPool::Wrapper.new do
             Sbmt::WaterDrop::Producer.new do |config|
-              configure_producer(config)
+              configure_client(config)
             end
           end
         end
@@ -21,30 +17,27 @@ module Sbmt
 
           ConnectionPool::Wrapper.new do
             Sbmt::WaterDrop::Producer.new do |config|
-              configure_producer(config, kafka)
+              configure_client(config, kafka)
             end
           end
         end
 
         private
 
-        def kafka_config
-          # TODO: will be configured in DEX-1075
-          # Sbmt::KafkaProducer::Configs::KafkaConfig.as_env
-          {seed_brokers: "kafka://kafka:9092", producer: {connect_timeout: ""}}
+        def configure_client(kafka_config, kafka_options = {})
+          kafka_config.logger = config.logger_class.classify.constantize.new
+          kafka_config.kafka = config.to_kafka_options.merge(kafka_options).symbolize_keys
+
+          kafka_config.deliver = config.deliver if config.deliver.present?
+          kafka_config.wait_on_queue_full = config.wait_on_queue_full if config.wait_on_queue_full.present?
+          kafka_config.max_payload_size = config.max_payload_size if config.max_payload_size.present?
+          kafka_config.max_wait_timeout = config.max_wait_timeout if config.max_wait_timeout.present?
+          kafka_config.wait_timeout = config.wait_timeout if config.wait_timeout.present?
+          kafka_config.wait_on_queue_full_timeout = config.wait_on_queue_full_timeout if config.wait_on_queue_full_timeout.present?
         end
 
-        def configure_producer(config, kafka_options = {})
-          config.deliver = PODUCER_DELIVER
-          config.logger = Sbmt::KafkaProducer.logger
-          config.wait_on_queue_full = PRODUCER_WAIT_ON_QUEUE_FULL
-          config.kafka = base_kafka_options.merge(kafka_options)
-        end
-
-        def base_kafka_options
-          {
-            "bootstrap.servers": kafka_config[:seed_brokers].split(",").map { |s| s.delete_prefix("kafka://") }.join(",")
-          }
+        def config
+          Configs::Producer
         end
       end
     end
