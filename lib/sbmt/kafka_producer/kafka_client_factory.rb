@@ -7,7 +7,7 @@ module Sbmt
         def default_client
           @default_client ||= ConnectionPool::Wrapper.new do
             Sbmt::WaterDrop::Producer.new do |config|
-              configure_producer(config)
+              configure_client(config)
             end
           end
         end
@@ -17,14 +17,14 @@ module Sbmt
 
           ConnectionPool::Wrapper.new do
             Sbmt::WaterDrop::Producer.new do |config|
-              configure_producer(config, kafka)
+              configure_client(config, kafka)
             end
           end
         end
 
         private
 
-        def configure_producer(kafka_config, kafka_options = {})
+        def configure_client(kafka_config, kafka_options = {})
           kafka_config.logger = config.logger_class.classify.constantize.new
           kafka_config.kafka = config.to_kafka_options.merge(kafka_options)
 
@@ -37,7 +37,7 @@ module Sbmt
         end
 
         def config
-          @config ||= Configs::Producer.new
+          Configs::Producer
         end
       end
     end

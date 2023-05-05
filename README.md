@@ -27,12 +27,12 @@ default: &default
   max_wait_timeout: 5
   wait_timeout: 0.005
   ignore_kafka_error: true
-auth:
-  kind: plaintext
-kafka:
-  servers: "kafka:9092"
-  kafka_config:
-    required_acks: -1
+  auth:
+    kind: plaintext
+  kafka:
+    servers: "kafka:9092"
+    kafka_config:
+      required_acks: -1
 development:
   <<: *default 
 test:

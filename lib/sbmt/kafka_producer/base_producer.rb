@@ -73,7 +73,7 @@ module Sbmt
       end
 
       def config
-        @config ||= Configs::Producer.new
+        Configs::Producer
       end
     end
   end
