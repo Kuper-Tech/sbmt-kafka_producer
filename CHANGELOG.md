@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.2.0] - 2023-05-16
+
+### Added
+- basic options for producer
+
+### Changed
+
+### Fixed
+
 ## [Unreleased] - 2023-05-04
 
 ### Added
