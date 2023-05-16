@@ -24,7 +24,11 @@ describe Sbmt::KafkaProducer::Configs::Producer, type: :config do
             "sasl.password": "password",
             "sasl.username": "username",
             # loaded from kafka_producer.yml
-            required_acks: -1
+            "message.send.max.retries": 2,
+            "request.required.acks": -1,
+            "request.timeout.ms": 1000.0,
+            "retry.backoff.ms": 1000.0,
+            "socket.connection.setup.timeout.ms": 1000.0
           )
       end
     end
