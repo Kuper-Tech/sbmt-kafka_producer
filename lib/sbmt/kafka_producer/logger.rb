@@ -16,6 +16,10 @@ module Sbmt
           logger.send(log_level, *args)
         end
       end
+
+      def add(...)
+        logger.add(...)
+      end
     end
   end
 end
