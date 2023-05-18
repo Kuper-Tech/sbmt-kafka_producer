@@ -19,17 +19,22 @@ describe Sbmt::KafkaProducer::Configs::Kafka, type: :config do
 
   context "when servers are properly set" do
     let(:servers) { "server1:9092,server2:9092" }
-    let(:kafka_config) {
-      {"max_retries" => 2,
-       "required_acks" => -1,
-       "ack_timeout" => 1,
-       "retry_backoff" => 1,
-       "connect_timeout" => 1}
-    }
+    let(:max_retries) { 2 }
+    let(:required_acks) { -1 }
+    let(:ack_timeout) { 1000.0 }
+    let(:retry_backoff) { 1000.0 }
+    let(:connect_timeout) { 1000.0 }
 
     before do
-      stub_const("ENV", {"KAFKA_PRODUCER_KAFKA_SERVERS" => "server1:9092,server2:9092"})
-      allow(Sbmt::KafkaProducer::Configs::Producer).to receive(:to_kafka_options).and_return(config.kafka_config = kafka_config)
+      stub_const("ENV",
+        {
+          "KAFKA_PRODUCER_KAFKA_SERVERS" => "server1:9092,server2:9092",
+          "KAFKA_PRODUCER_KAFKA_MAX_RETRIES" => 2,
+          "KAFKA_PRODUCER_KAFKA_REQUIRED_ACKS" => -1,
+          "KAFKA_PRODUCER_KAFKA_ACK_TIMEOUT" => 1,
+          "KAFKA_PRODUCER_KAFKA_RETRY_BACKOFF" => 1,
+          "KAFKA_PRODUCER_KAFKA_CONNECT_TIMEOUT" => 1
+        })
     end
 
     it "successfully loads config and translates to kafka options" do
@@ -37,11 +42,11 @@ describe Sbmt::KafkaProducer::Configs::Kafka, type: :config do
       expect(config.to_kafka_options)
         .to eq(
           "bootstrap.servers": servers,
-          "message.send.max.retries": 2,
-          "request.required.acks": -1,
-          "request.timeout.ms": 1000.0,
-          "retry.backoff.ms": 1000.0,
-          "socket.connection.setup.timeout.ms": 1000.0
+          "message.send.max.retries": max_retries,
+          "request.required.acks": required_acks,
+          "request.timeout.ms": ack_timeout,
+          "retry.backoff.ms": retry_backoff,
+          "socket.connection.setup.timeout.ms": connect_timeout
         )
     end
   end

@@ -26,7 +26,7 @@ module Sbmt
 
         def configure_client(kafka_config, kafka_options = {})
           kafka_config.logger = config.logger_class.classify.constantize.new
-          kafka_config.kafka = config.to_kafka_options.merge(custom_kafka_config(kafka_options)).symbolize_keys
+          kafka_config.kafka = config.to_kafka_options.merge(kafka_options).symbolize_keys
 
           kafka_config.deliver = config.deliver if config.deliver.present?
           kafka_config.wait_on_queue_full = config.wait_on_queue_full if config.wait_on_queue_full.present?
@@ -34,18 +34,6 @@ module Sbmt
           kafka_config.max_wait_timeout = config.max_wait_timeout if config.max_wait_timeout.present?
           kafka_config.wait_timeout = config.wait_timeout if config.wait_timeout.present?
           kafka_config.wait_on_queue_full_timeout = config.wait_on_queue_full_timeout if config.wait_on_queue_full_timeout.present?
-        end
-
-        def custom_kafka_config(kafka_options)
-          result = {}
-
-          result["socket.connection.setup.timeout.ms"] = kafka_options["connect_timeout"].to_f * 1000 if kafka_options.key?("connect_timeout")
-          result["request.timeout.ms"] = kafka_options["ack_timeout"].to_f * 1000 if kafka_options.key?("ack_timeout")
-          result["request.required.acks"] = kafka_options["required_acks"] if kafka_options.key?("required_acks")
-          result["message.send.max.retries"] = kafka_options["max_retries"] if kafka_options.key?("max_retries")
-          result["retry.backoff.ms"] = kafka_options["retry_backoff"].to_f * 1000 if kafka_options.key?("retry_backoff")
-
-          result
         end
 
         def config

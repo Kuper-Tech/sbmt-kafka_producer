@@ -30,9 +30,15 @@ default: &default
   auth:
     kind: plaintext
   kafka:
-    servers: "kafka:9092"
-    kafka_config:
-      required_acks: -1
+  servers: "kafka:9092"
+  max_retries: 2
+  required_acks: -1
+  ack_timeout: 1
+  retry_backoff: 1
+  connect_timeout: 1
+  kafka_config:
+    queue.buffering.max.messages: 1
+    queue.buffering.max.ms: 10_000
 development:
   <<: *default 
 test:
