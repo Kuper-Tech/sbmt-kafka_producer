@@ -50,6 +50,7 @@ staging: &staging
 production:
   <<: *staging
 ```
+Секция `kafka_config` служит для добавления произвольный опций для `kafka`
 
 ## Разработка
 
