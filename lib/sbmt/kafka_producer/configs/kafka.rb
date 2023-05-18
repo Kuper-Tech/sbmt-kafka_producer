@@ -31,6 +31,11 @@ module Sbmt
 
         def ensure_options_are_valid
           raise_validation_error "invalid servers: #{servers}, should be in format: \"host1:port1,host2:port2,...\"" unless SERVERS_REGEXP.match?(servers)
+          raise_validation_error "invalid connect_timeout: cannot be empty" unless connect_timeout&.is_a?(Integer)
+          raise_validation_error "invalid ack_timeout: cannot be empty" unless ack_timeout&.is_a?(Integer)
+          raise_validation_error "invalid required_acks: cannot be empty" unless required_acks&.is_a?(Integer)
+          raise_validation_error "invalid max_retries: cannot be empty" unless max_retries&.is_a?(Integer)
+          raise_validation_error "invalid retry_backoff: cannot be empty" unless retry_backoff&.is_a?(Integer)
         end
       end
     end
