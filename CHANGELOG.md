@@ -13,6 +13,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.2.2] - 2023-05-18
+
+### Added
+- arbitrary parameters from kafka
+
+### Changed
+
+### Fixed
+
+## [0.2.1] - 2023-05-16
+
+### Added
+- fix logger
+
+### Changed
+
+### Fixed
+
 ## [0.2.0] - 2023-05-16
 
 ### Added
