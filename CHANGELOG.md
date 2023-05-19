@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.2.3] - 2023-05-19
+
+### Added
+- for outbox, if the default settings for the kafka section are overridden, they are overwritten
+
+### Changed
+
+### Fixed
+
 ## [0.2.2] - 2023-05-18
 
 ### Added
