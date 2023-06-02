@@ -23,7 +23,8 @@ module Sbmt
           :max_payload_size, :max_wait_timeout, :wait_timeout,
           :wait_on_queue_full_timeout,
           auth: {}, kafka: {},
-          logger_class: "::Sbmt::KafkaProducer::Logger"
+          logger_class: "::Sbmt::KafkaProducer::Logger",
+          metrics_listener_class: "::Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener"
 
         coerce_types ignore_kafka_error: :boolean,
           deliver: :boolean, wait_on_queue_full: :boolean,

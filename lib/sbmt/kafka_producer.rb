@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require "anyway_config"
-require "active_support/core_ext/module/delegation"
 require "connection_pool"
 require "dry-initializer"
+require "rails/railtie"
 require "sentry-ruby"
+require "yabeda"
 require "zeitwerk"
 
 module Sbmt

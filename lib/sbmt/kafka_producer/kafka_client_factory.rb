@@ -34,6 +34,8 @@ module Sbmt
           kafka_config.max_wait_timeout = config.max_wait_timeout if config.max_wait_timeout.present?
           kafka_config.wait_timeout = config.wait_timeout if config.wait_timeout.present?
           kafka_config.wait_on_queue_full_timeout = config.wait_on_queue_full_timeout if config.wait_on_queue_full_timeout.present?
+
+          kafka_config.monitor.subscribe(config.metrics_listener_class.classify.constantize.new)
         end
 
         def custom_kafka_config(kafka_options)

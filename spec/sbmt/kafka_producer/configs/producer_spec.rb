@@ -35,5 +35,12 @@ describe Sbmt::KafkaProducer::Configs::Producer, type: :config do
           )
       end
     end
+
+    it "has correct defaults" do
+      with_env(default_env) do
+        expect(config.logger_class).to eq("::Sbmt::KafkaProducer::Logger")
+        expect(config.metrics_listener_class).to eq("::Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener")
+      end
+    end
   end
 end
