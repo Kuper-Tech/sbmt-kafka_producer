@@ -10,7 +10,7 @@ module Sbmt
         attr_config :servers,
           connect_timeout: 1,
           ack_timeout: 1,
-          required_acks: 1,
+          required_acks: -1,
           max_retries: 2,
           retry_backoff: 1,
           kafka_config: {}
