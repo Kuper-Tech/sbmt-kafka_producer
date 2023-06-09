@@ -61,9 +61,9 @@ module Sbmt
         result
       end
 
-      def ignore_kafka_errors?
-        config.ignore_kafka_error.to_s == "true"
-      end
+      # def ignore_kafka_errors?
+      #   config.ignore_kafka_error.to_s == "true"
+      # end
 
       def log_error(error)
         return true if ignore_kafka_errors?
@@ -72,9 +72,9 @@ module Sbmt
         Sentry.capture_message(error, level: "error") if ::Sentry.initialized?
       end
 
-      def config
-        Config::Producer
-      end
+      # def config
+      #   Config::Producer
+      # end
     end
   end
 end
