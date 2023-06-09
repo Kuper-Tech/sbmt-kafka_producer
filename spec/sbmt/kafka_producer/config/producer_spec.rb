@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Sbmt::KafkaProducer::Configs::Producer, type: :config do
+describe Sbmt::KafkaProducer::Config::Producer, type: :config do
   context "when app initialized" do
     let(:default_env) {
       {
@@ -13,11 +13,20 @@ describe Sbmt::KafkaProducer::Configs::Producer, type: :config do
       }
     }
     let(:config) { described_class.new }
+    let(:kafka_config_defaults) do
+      {
+        "socket.connection.setup.timeout.ms": 1000,
+        "request.timeout.ms": 1000,
+        "request.required.acks": -1,
+        "message.send.max.retries": 2,
+        "retry.backoff.ms": 1000
+      }
+    end
 
     it "properly merges kafka options" do
       with_env(default_env) do
         expect(config.to_kafka_options)
-          .to eq(
+          .to eq(kafka_config_defaults.merge(
             "bootstrap.servers": "server1:9092,server2:9092",
             "security.protocol": "sasl_plaintext",
             "sasl.mechanism": "PLAIN",
@@ -32,7 +41,7 @@ describe Sbmt::KafkaProducer::Configs::Producer, type: :config do
             # arbitrary parameters for section kafka_config file kafka_producer.yml
             "queue.buffering.max.messages": 1,
             "queue.buffering.max.ms": 10000
-          )
+          ))
       end
     end
 

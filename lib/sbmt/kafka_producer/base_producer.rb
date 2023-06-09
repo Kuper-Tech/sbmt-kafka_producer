@@ -73,7 +73,7 @@ module Sbmt
       end
 
       def config
-        Configs::Producer
+        Config::Producer
       end
     end
   end
