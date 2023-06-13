@@ -9,7 +9,7 @@ module Sbmt
         # srv1:port1,srv2:port2,...
         SERVERS_REGEXP = /^[a-z\d.\-:]+(,[a-z\d.\-:]+)*$/.freeze
 
-        attribute :servers, Sbmt::KafkaProducer::Types::String.constrained(format: SERVERS_REGEXP).default("localhost:9092")
+        attribute :servers, Sbmt::KafkaProducer::Types::String.constrained(format: SERVERS_REGEXP)
 
         # defaults are rdkafka's
         # see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md

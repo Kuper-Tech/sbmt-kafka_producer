@@ -20,7 +20,6 @@ describe Sbmt::KafkaProducer::Config::Auth, type: :config do
 
     it "loads valid config and properly translates to kafka options" do
       with_env(
-        "KAFKA_PRODUCER_AUTH_KIND" => "sasl_plaintext",
         "KAFKA_PRODUCER_AUTH_SASL_USERNAME" => "username",
         "KAFKA_PRODUCER_AUTH_SASL_PASSWORD" => "password",
         "KAFKA_PRODUCER_AUTH_SASL_MECHANISM" => "PLAIN"
