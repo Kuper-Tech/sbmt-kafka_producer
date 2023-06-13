@@ -57,6 +57,16 @@ production:
 Гем собирает базовые продюсинг метрики в yabeda, см. `YabedaConfigurer`
 Для начала работы достаточно в основном приложении подключить любой поддерживаемый yabeda-экспортер (например, `yabeda-prometheus-mmap`) и метрики станут доступны из коробки
 
+**NOTE:** При использовании **Yabeda** в **rails** приложении добавить:
+
+```ruby
+# We must manually require this file because Yabeda gem depends on Anyway gem
+# and is loaded as a Puma plugin before Rails initialization.
+require "anyway/rails"
+```
+
+в `config/application.rb` после `Bundler.require`
+
 ## Разработка
 
 ### Локальное окружение
