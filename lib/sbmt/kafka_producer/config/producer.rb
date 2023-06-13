@@ -2,12 +2,20 @@
 
 module Sbmt
   module KafkaProducer
-    module Configs
+    module Config
       class Producer < Anyway::Config
         class << self
           # Make it possible to access a singleton config instance
           # via class methods (i.e., without explicitly calling `instance`)
           delegate_missing_to :instance
+
+          def coerce_to(struct)
+            lambda do |raw_attrs|
+              struct.new(**raw_attrs)
+            rescue Dry::Types::SchemaError => e
+              raise_validation_error "cannot parse #{struct}: #{e.message}"
+            end
+          end
 
           private
 
@@ -30,8 +38,8 @@ module Sbmt
           deliver: :boolean, wait_on_queue_full: :boolean,
           max_payload_size: :integer, max_wait_timeout: :integer,
           wait_timeout: :float, wait_on_queue_full_timeout: :float
-        coerce_types kafka: {config: Kafka}
-        coerce_types auth: {config: Auth}
+        coerce_types kafka: coerce_to(Kafka)
+        coerce_types auth: coerce_to(Auth)
 
         def to_kafka_options
           kafka.to_kafka_options

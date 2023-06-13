@@ -3,6 +3,8 @@
 require "anyway_config"
 require "connection_pool"
 require "dry-initializer"
+require "dry/types"
+require "dry-struct"
 require "rails/railtie"
 require "sentry-ruby"
 require "yabeda"

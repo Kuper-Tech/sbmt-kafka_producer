@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.4.0] - 2023-06-13
+
+### Changed
+- config changed from anyway to Dry::Struct
+
 ## [0.3.0] - 2023-06-01
 
 ### Added
