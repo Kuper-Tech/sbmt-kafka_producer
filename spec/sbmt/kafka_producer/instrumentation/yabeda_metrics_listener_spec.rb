@@ -47,7 +47,6 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
 
   describe ".on_error_occurred" do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
-    let(:producer) { OpenStruct.new({message: topic}) }
     let(:tags) do
       {
         client: "sbmt-waterdrop",
@@ -56,7 +55,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     end
 
     context "when error type is message.produce_sync" do
-      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", caller: producer, type: "message.produce_sync") }
+      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", type: "message.produce_sync", message: topic) }
 
       it "increments producer error counter" do
         expect { described_class.new.on_error_occurred(event) }
@@ -66,7 +65,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     end
 
     context "when error type is message.produce_async" do
-      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", caller: producer, type: "message.produce_async") }
+      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", type: "message.produce_async", message: topic) }
 
       it "increments producer error counter" do
         expect { described_class.new.on_error_occurred(event) }
@@ -76,7 +75,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     end
 
     context "when error type is librdkafka.dispatch_error" do
-      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", caller: producer, topic: "topic", type: "librdkafka.dispatch_error") }
+      let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", topic: "topic", type: "librdkafka.dispatch_error") }
 
       tags = {client: "sbmt-waterdrop", topic: "topic"}
 

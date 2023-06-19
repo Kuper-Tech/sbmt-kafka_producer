@@ -14,13 +14,12 @@ module Sbmt
         end
 
         def on_error_occurred(event)
-          caller = event[:caller]
           tags = {topic: event[:topic]}.merge!(DEFAULT_CLIENT) if event.payload.include?(:topic)
 
           case event[:type]
           when "message.produce_sync", "message.produce_async"
             Yabeda.kafka_producer.produce_errors
-              .increment(produce_base_tags(caller))
+              .increment(produce_base_tags(event))
           when "librdkafka.dispatch_error"
             Yabeda.kafka_producer.deliver_errors
               .increment(tags)
