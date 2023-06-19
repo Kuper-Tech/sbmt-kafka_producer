@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.4.1] - 2023-06-19
+
+### Fixed
+- fixed error handling in the method **on_error_occurred**
+
 ## [0.4.0] - 2023-06-13
 
 ### Changed
