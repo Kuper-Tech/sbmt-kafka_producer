@@ -10,7 +10,8 @@
 
 Добавить в Gemfile
 ```ruby
-gem "sbmt-kafka_producer", "~> 0.1.0"
+gem "sbmt-kafka_producer", "~> 0.4"
+gem 'sbmt-waterdrop', '~> 2.5'
 ```
 
 Выполнить
@@ -18,8 +19,8 @@ gem "sbmt-kafka_producer", "~> 0.1.0"
 bundle install
 ```
 
-Создать и настроить конфигурационный файл config/kafka_producer.yml, пример конфига:
-```ruby
+Создать и настроить конфигурационный файл config/kafka_producer.yml, пример (см. описание в разделах ниже):
+```yaml
 default: &default
   deliver: true
   wait_on_queue_full: true
@@ -31,11 +32,11 @@ default: &default
     kind: plaintext
   kafka:
     servers: "kafka:9092"
-    max_retries: 2
-    required_acks: -1
-    ack_timeout: 1
-    retry_backoff: 1
-    connect_timeout: 1
+    max_retries: 2 # message.send.max.retries default: 2
+    required_acks: -1 # request.required.acks default: -1
+    ack_timeout: 1 # request.timeout.ms, указывается числов в секундах default: 1
+    retry_backoff: 1 # retry.backoff.ms, указывается числов в секундах default: 1
+    connect_timeout: 1 # socket.connection.setup.timeout.ms, указывается числов в секундах default: 1
     kafka_config:
       queue.buffering.max.messages: 1
       queue.buffering.max.ms: 10_000
@@ -50,9 +51,70 @@ staging: &staging
 production:
   <<: *staging
 ```
-Секция `kafka_config` служит для добавления произвольных опций, которых нет в секиции `kafka`
 
-#### Метрики
+#### Конфигурация: блок `auth`
+
+Поддерживаются две версии: plaintext (дефолт, если не указывать) и SASL-plaintext
+
+Вариант конфигурации SASL-plaintext:
+```yaml
+auth:
+  kind: sasl_plaintext
+  sasl_username: user
+  sasl_password: pwd
+  sasl_mechanism: SCRAM-SHA-512
+```
+
+#### Конфигурация: блок `kafka`
+
+Обязательной опцией является `servers` в формате rdkafka (**без префикса схемы** `kafka://`): `srv1:port1,srv2:port2,...`
+В разделе `kafka_config` можно указать (любые опции rdkafka)[https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md]
+
+### Конфигурация `producer` (не outbox) пример:
+
+- Создать базовый класс `applicaton_producer.rb` в `app/producers/`
+
+```ruby
+# frozen_string_literal: true
+
+class ApplicationProducer < Sbmt::KafkaProducer::BaseProducer; end
+```
+
+- Создать `producer`, который будет продюсить сообщения:
+
+```ruby
+# frozen_string_literal: true
+
+class SomeProducer < ApplicationProducer
+  option :topic, default: -> { 'topic' }
+
+  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
+    sync_publish(payload, options)
+  end
+end
+```
+
+- Продюсить сообщения в кафку:
+
+```ruby
+SomeProducer.publish(payload)
+```
+
+### Конфигурация `producer` (outbox) пример:
+
+В файл `config/outbox.yml` добавить секицю `transports`
+
+```yaml
+outbox_items:
+  export_outbox_item:
+    transports:
+      sbmt/kafka_producer:
+        topic: 'topic'
+        kafka:
+          required_acks: 1
+```
+
+### Метрики
 
 Гем собирает базовые продюсинг метрики в yabeda, см. `YabedaConfigurer`
 Для начала работы достаточно в основном приложении подключить любой поддерживаемый yabeda-экспортер (например, `yabeda-prometheus-mmap`) и метрики станут доступны из коробки
