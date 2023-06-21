@@ -97,7 +97,7 @@ end
 - Продюсить сообщения в кафку:
 
 ```ruby
-SomeProducer.publish(payload)
+SomeProducer.new.publish(payload)
 ```
 
 ### Конфигурация `producer` (outbox) пример:
