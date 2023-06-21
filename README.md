@@ -52,6 +52,12 @@ production:
   <<: *staging
 ```
 
+#### Конфигурация: блок `default`
+
+Опции для `sbmt-waterdrop` определены вот [тут](https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb#L25)
+
+Опция `ignore_kafka_error` кастомная и отключает логирование ошибок в `Rails.logger` и `Sentry`
+
 #### Конфигурация: блок `auth`
 
 Поддерживаются две версии: plaintext (дефолт, если не указывать) и SASL-plaintext
