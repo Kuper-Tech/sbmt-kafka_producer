@@ -10,7 +10,7 @@
 
 Добавить в Gemfile
 ```ruby
-gem "sbmt-kafka_producer", "~> 0.4"
+gem "sbmt-kafka_producer", "~> 0.5"
 gem 'sbmt-waterdrop', '~> 2.5'
 ```
 
@@ -134,6 +134,11 @@ require "anyway/rails"
 ```
 
 в `config/application.rb` после `Bundler.require`
+
+### RSpec
+
+Так как при тестирование **producer** пытается создать соединение с кафкой, необходимо в `spec/rails_helper.rb` добавить `require 'sbmt/kafka_producer/testing'`
+Это из коробки создает `mock` объекта
 
 ## Разработка
 

@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.5.0] - 2023-06-26
+
+### Fixed
+- Mock BaseProducer for rspec
+
 ## [Unreleased] - 2023-06-21
 
 ### Changed
