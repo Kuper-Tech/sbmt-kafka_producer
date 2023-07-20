@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+<% module_namespacing do -%>
+class <%= namespaced_class_name %> < ApplicationProducer
+  option :topic, default: -> { 'topic' }
+
+  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
+    async_publish(payload, options)
+  end
+end
+<% end -%>

@@ -32,7 +32,7 @@ module KafkaProducer
       end
 
       def namespaced_class_name
-        file_path.camelize
+        file_path.camelize + "Producer"
       end
 
       def producer?
