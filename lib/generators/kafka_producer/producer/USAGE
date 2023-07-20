@@ -1,0 +1,9 @@
+Description:
+    Generates Producer (application_producer, producer)
+
+Example:
+    bin/rails generate kafka_producer:producer User
+
+    This will create:
+      app/producers/application_producer.rb
+      app/producers/producer/user_producer.rb

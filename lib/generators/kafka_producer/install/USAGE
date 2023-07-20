@@ -1,0 +1,8 @@
+Description:
+    Generates initial environment for Kafka Producer
+
+Example:
+    bin/rails generate install
+
+    This will create:
+      config/kafka_producer.yml

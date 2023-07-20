@@ -1,0 +1,33 @@
+default: &default
+  deliver: true
+  wait_on_queue_full: true
+  max_payload_size: 1000012
+  max_wait_timeout: 5
+  wait_timeout: 0.005
+  ignore_kafka_error: true
+
+  auth:
+    kind: plaintext
+#    kind: sasl_plaintext
+#    sasl_username: user
+#    sasl_password: pwd
+#    sasl_mechanism: SCRAM-SHA-512
+
+  kafka:
+    servers: "kafka:9092"
+    max_retries: 2
+    required_acks: -1
+    ack_timeout: 1
+    retry_backoff: 1
+    connect_timeout: 1
+
+development:
+  <<: *default
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+staging: &staging
+  <<: *default
+production:
+  <<: *staging
