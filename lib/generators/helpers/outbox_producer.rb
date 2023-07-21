@@ -48,8 +48,6 @@ module KafkaProducer
             transports:
               sbmt/kafka_producer:
                 topic: 'need to add a topic'
-                kafka:
-                  required_acks: -1
           YAML
 
           pattern = /#{name_outbox_item}.*?(exponential_backoff)\s*\n/m
