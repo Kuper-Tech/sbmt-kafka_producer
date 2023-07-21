@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.6.0] - 2023-07-23
+
+### Added
+
+- rails generator for initial configuration
+- rails generator for producer/outbox_producer creation
+
 ## [0.5.1] - 2023-07-21
 
 ### Fixed

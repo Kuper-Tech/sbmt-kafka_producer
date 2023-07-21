@@ -10,7 +10,7 @@
 
 Добавить в Gemfile
 ```ruby
-gem "sbmt-kafka_producer", "~> 0.5"
+gem "sbmt-kafka_producer", "~> 0.6"
 gem 'sbmt-waterdrop', '~> 2.5'
 ```
 
@@ -18,6 +18,44 @@ gem 'sbmt-waterdrop', '~> 2.5'
 ```bash
 bundle install
 ```
+
+## Auto configuration
+
+Для упрощения настройки и создания producer реализованы rails-генераторы
+
+### Настройка первоначальной конфигурации гема
+
+Если вы подключаете sbmt-kafka_producer в свое приложения впервые, можно сгенерировать первоначальную базовую конфигурацию:
+
+```shell
+bundle exec rails g kafka_producer:install
+```
+
+В результате будут создан основной конфиг гема
+
+### Создание producer
+
+Сгенерировать producer можно следующим образом:
+
+```shell
+bundle exec rails g kafka_producer:producer MaybeNamespaced::Name
+```
+
+В результате будет создан базовый продюсер, по умолчанию создается продюсер для синхронного стрима в кафку, если нужен асинхронный, то нужно передать опцию `async`, к примеру:
+
+```shell
+bundle exec rails g kafka_producer:producer MaybeNamespaced::Name async
+```
+
+### Создание outbox_producer
+
+Сгенерировать outbox_producer можно следующим образом:
+
+```shell
+bundle exec rails g kafka_producer:outbox_producer name
+```
+
+В результате будут внесены изменения в `config/outbox.yaml` для вашего outbox_item
 
 Создать и настроить конфигурационный файл config/kafka_producer.yml, пример (см. описание в разделах ниже):
 ```yaml
@@ -88,6 +126,7 @@ class ApplicationProducer < Sbmt::KafkaProducer::BaseProducer; end
 
 - Создать `producer`, который будет продюсить сообщения:
 
+**Синхронный**
 ```ruby
 # frozen_string_literal: true
 
@@ -96,6 +135,19 @@ class SomeProducer < ApplicationProducer
 
   def publish(payload, options) # options - не обязательный и должен быть в виде хэша
     sync_publish(payload, options)
+  end
+end
+```
+
+**Асинхронный**
+```ruby
+# frozen_string_literal: true
+
+class SomeProducer < ApplicationProducer
+  option :topic, default: -> { 'topic' }
+
+  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
+    async_publish(payload, options)
   end
 end
 ```
@@ -117,7 +169,7 @@ outbox_items:
       sbmt/kafka_producer:
         topic: 'topic'
         kafka:
-          required_acks: 1
+          required_acks: -1
 ```
 
 ### Метрики
