@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.5.1] - 2023-07-21
+
+### Fixed
+
+- change sentry method from capture_message to capture_exception 
+
 ## [0.5.0] - 2023-06-26
 
 ### Fixed
