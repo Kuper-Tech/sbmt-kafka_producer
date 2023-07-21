@@ -1,0 +1,8 @@
+Description:
+    Generates OutboxProducer (modify config/outbox.yml)
+
+Example:
+    bin/rails generate kafka_producer:outbox_producer
+
+    This will modify:
+        config/outbox.yml

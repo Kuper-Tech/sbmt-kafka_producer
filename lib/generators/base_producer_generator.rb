@@ -8,6 +8,7 @@ module KafkaProducer
     class BaseProducerGenerator < NamedBase
       class_option :skip_config, type: :boolean, default: false, desc: "Skip modifying config/kafka_producer.yml"
       class_option :skip_producer, type: :boolean, default: false, desc: "Skip creating producer"
+      class_option :skip_config, type: :boolean, default: false, desc: "Skip modifying config/outbox.yml"
 
       def initial_setup
         return if config_exists?
@@ -19,6 +20,7 @@ module KafkaProducer
         return if options[:skip_producer]
 
         create_producer_file(path) if producer?
+        update_outbox_producer_file if outbox_producer?
       end
 
       private
@@ -37,6 +39,10 @@ module KafkaProducer
 
       def producer?
         kind == :producer
+      end
+
+      def outbox_producer?
+        kind == :outbox_producer
       end
     end
   end

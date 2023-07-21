@@ -7,11 +7,13 @@ module KafkaProducer
     class Base < Rails::Generators::Base
       include Helpers::Config
       include Helpers::Producer
+      include Helpers::OutboxProducer
     end
 
     class NamedBase < Rails::Generators::NamedBase
       include Helpers::Config
       include Helpers::Producer
+      include Helpers::OutboxProducer
     end
   end
 end
