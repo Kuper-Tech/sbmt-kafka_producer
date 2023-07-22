@@ -19,45 +19,10 @@ gem 'sbmt-waterdrop', '~> 2.5'
 bundle install
 ```
 
-## Auto configuration
+Создать и настроить конфигурационный файл config/kafka_producer.yml.
+Для быстрой настройки см. раздел [Генераторы](#генераторы).
+Пример (см. описание в разделах ниже):
 
-Для упрощения настройки и создания producer реализованы rails-генераторы
-
-### Настройка первоначальной конфигурации гема
-
-Если вы подключаете sbmt-kafka_producer в свое приложения впервые, можно сгенерировать первоначальную базовую конфигурацию:
-
-```shell
-bundle exec rails g kafka_producer:install
-```
-
-В результате будут создан основной конфиг гема
-
-### Создание producer
-
-Сгенерировать producer можно следующим образом:
-
-```shell
-bundle exec rails g kafka_producer:producer MaybeNamespaced::Name
-```
-
-В результате будет создан базовый продюсер, по умолчанию создается продюсер для синхронного стрима в кафку, если нужен асинхронный, то нужно передать опцию `async`, к примеру:
-
-```shell
-bundle exec rails g kafka_producer:producer MaybeNamespaced::Name async
-```
-
-### Создание outbox_producer
-
-Сгенерировать outbox_producer можно следующим образом:
-
-```shell
-bundle exec rails g kafka_producer:outbox_producer name
-```
-
-В результате будут внесены изменения в `config/outbox.yaml` для вашего outbox_item
-
-Создать и настроить конфигурационный файл config/kafka_producer.yml, пример (см. описание в разделах ниже):
 ```yaml
 default: &default
   deliver: true
@@ -113,6 +78,46 @@ auth:
 
 Обязательной опцией является `servers` в формате rdkafka (**без префикса схемы** `kafka://`): `srv1:port1,srv2:port2,...`
 В разделе `kafka_config` можно указать (любые опции rdkafka)[https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md]
+
+## Генераторы
+
+Для упрощения настройки и создания producer реализованы rails-генераторы
+
+### Настройка первоначальной конфигурации гема
+
+Если подключаете sbmt-kafka_producer в свое приложения впервые, можно сгенерировать первоначальную базовую конфигурацию:
+
+```shell
+bundle exec rails g kafka_producer:install
+```
+
+В результате будут создан основной конфиг гема
+
+### Создание producer
+
+Сгенерировать producer можно следующим образом:
+
+```shell
+bundle exec rails g kafka_producer:producer MaybeNamespaced::Name sync topic
+```
+
+В результате будет создан базовый продюсер для синхронного стриминга в кафку
+
+Более подробно перечень опций генератора можно посмотреть в help:
+
+```shell
+bin/rails generate kafka_producer:producer --help
+```
+
+### Создание outbox_producer
+
+Для использования совместно с гемом [outbox](https://gitlab.sbmt.io/nstmrt/rubygems/outbox), нужно выполнить:
+
+```shell
+bundle exec rails g kafka_producer:outbox_producer name
+```
+
+В результате будут внесены изменения в `config/outbox.yaml` для вашего outbox_item
 
 ### Конфигурация `producer` (не outbox) пример:
 
