@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+<%- module_namespacing do -%>
+class <%= "#{name.classify}Producer" %> < Sbmt::KafkaProducer::BaseProducer
+  option :topic, default: -> { "<%= topic %>" }
+
+  def publish(payload, **options) # options - optional
+    <%= ("#{producer_type}_publish") %>(payload, options)
+  end
+end
+<%- end -%>

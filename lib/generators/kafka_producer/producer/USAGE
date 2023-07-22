@@ -1,9 +1,9 @@
 Description:
-    Generates Producer (application_producer, producer)
+    Stubs out a new non-outbox producer. Pass the producer name, either
+         CamelCased or under_scored
 
 Example:
-    bin/rails generate kafka_producer:producer User
+    bin/rails generate kafka_producer:producer Test
 
     This will create:
-      app/producers/application_producer.rb
-      app/producers/producer/user_producer.rb
+      app/producers/test_producer.rb
