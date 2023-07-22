@@ -15,32 +15,30 @@ module KafkaProducer
         end
 
         def update_outbox_producer_file
-          return absent_file unless outbox_config_exists?
-          return absent_section unless outbox_item_exists?
+          return config_missing unless outbox_config_exists?
+          return section_missing unless outbox_item_exists?
 
           modify_outbox_config
         end
 
-        def absent_file
+        def config_missing
           $stdout.puts "Could not find file config/outbox.yml"
         end
 
-        def absent_section
-          $stdout.puts "Could not find section #{name_outbox_item} in config/outbox.yml"
+        def section_missing
+          $stdout.puts "Could not find section #{item_name} in config/outbox.yml"
         end
 
         def load_yaml
-          data_yaml = Psych.load_file(OUTBOX_CONFIG_PATH)
-
-          @load_yaml ||= data_yaml
+          @load_yaml ||= Psych.load_file(OUTBOX_CONFIG_PATH)
         end
 
-        def name_outbox_item
+        def item_name
           "#{path}_outbox_item"
         end
 
         def outbox_item_exists?
-          load_yaml.fetch("default", {}).fetch("outbox_items", {}).fetch(name_outbox_item, false)
+          load_yaml.fetch("default", {}).fetch("outbox_items", {}).fetch(item_name, false)
         end
 
         def modify_outbox_config
@@ -50,7 +48,7 @@ module KafkaProducer
                 topic: 'need to add a topic'
           YAML
 
-          pattern = /#{name_outbox_item}.*?(exponential_backoff)\s*\n/m
+          pattern = /#{item_name}.*?(exponential_backoff)\s*\n/m
           inject_into_file OUTBOX_CONFIG_PATH, optimize_indentation(transpport_declarations_data, 6), after: pattern
         end
       end

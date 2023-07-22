@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 <% module_namespacing do -%>
-class <%= namespaced_class_name %> < ApplicationProducer
+class <%= namespaced_class_name %> < Sbmt::KafkaProducer::BaseProducer
   option :topic, default: -> { 'topic' }
 
-  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
+  def publish(payload, **options) # options - optional
     sync_publish(payload, options)
   end
 end
