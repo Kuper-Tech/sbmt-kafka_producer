@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "generators/base_producer_generator"
+require "rails/generators/base"
 
 module KafkaProducer
   module Generators
