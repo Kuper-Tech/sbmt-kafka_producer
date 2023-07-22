@@ -1,9 +1,10 @@
 Description:
     Stubs out a new non-outbox producer. Pass the producer name, either
          CamelCased or under_scored
+    It takes the producer type, topic as arguments.
 
 Example:
-    bin/rails generate kafka_producer:producer Test
+    bin/rails generate kafka_producer:producer Test producer_type topic
 
     This will create:
       app/producers/test_producer.rb
