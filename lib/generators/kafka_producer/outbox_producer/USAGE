@@ -1,8 +1,11 @@
 Description:
-    Generates OutboxProducer (modify config/outbox.yml)
+    Modifies the config/outbox.yml file to work with the outbox gem
+    The argument is specified without "outbox_item"
+    Pass the outbox item, either
+             Camel or under_scored
 
 Example:
-    bin/rails generate kafka_producer:outbox_producer
+    bin/rails generate kafka_producer:outbox_producer outbox_item
 
     This will modify:
         config/outbox.yml
