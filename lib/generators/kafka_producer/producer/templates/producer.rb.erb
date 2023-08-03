@@ -4,7 +4,7 @@
 class <%= "#{name.classify}Producer" %> < Sbmt::KafkaProducer::BaseProducer
   option :topic, default: -> { "<%= topic %>" }
 
-  def publish(payload, **options) # options - optional
+  def publish(payload, **options)
     <%= ("#{producer_type}_publish") %>(payload, options)
   end
 end

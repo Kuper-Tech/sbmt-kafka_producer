@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
-require "rails/generators/base"
+require "rails/generators"
+require "generators/kafka_producer/concerns/configuration"
 
 module KafkaProducer
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      source_root File.expand_path("templates", __dir__)
+      include Concerns::Configuration
 
-      CONFIG_PATH = "config/kafka_producer.yml"
+      source_root File.expand_path("templates", __dir__)
 
       def create_kafka_producer_yml
         copy_file "kafka_producer.yml", CONFIG_PATH

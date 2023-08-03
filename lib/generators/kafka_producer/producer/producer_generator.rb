@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails/generators/named_base"
+require "rails/generators"
 
 module KafkaProducer
   module Generators
     class ProducerGenerator < Rails::Generators::NamedBase
       source_root File.expand_path("templates", __dir__)
 
-      argument :producer_type, type: :string, banner: "async or sync"
+      argument :producer_type, type: :string, banner: "sync/async"
       argument :topic, type: :string, banner: "topic"
 
       def insert_producer_class
