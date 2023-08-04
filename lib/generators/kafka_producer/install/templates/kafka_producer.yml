@@ -7,9 +7,9 @@ default: &default
   ignore_kafka_error: true
 
   auth:
-    sasl_username: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
-    sasl_password: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
-    sasl_mechanism: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
+    sasl_username: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
+    sasl_password: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
+    sasl_mechanism: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
     kind: 'sasl_plaintext'
 
   kafka:
