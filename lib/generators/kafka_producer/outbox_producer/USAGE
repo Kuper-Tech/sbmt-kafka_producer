@@ -1,0 +1,9 @@
+Description:
+    Modifies the config/outbox.yml file to work with the outbox gem
+    Pass in the outbox item, either CamelCased or under_scored
+
+Example:
+    bin/rails generate kafka_producer:outbox_producer some_namespace/outbox_item
+
+    This will modify:
+        config/outbox.yml

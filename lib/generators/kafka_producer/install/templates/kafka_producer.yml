@@ -1,0 +1,36 @@
+default: &default
+  deliver: true
+  wait_on_queue_full: true
+  max_payload_size: 1000012
+  max_wait_timeout: 5
+  wait_timeout: 0.005
+  ignore_kafka_error: true
+
+  auth:
+    sasl_username: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
+    sasl_password: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
+    sasl_mechanism: <%= ENV.fetch('KAFKA_BROKERS'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
+    kind: 'sasl_plaintext'
+
+  kafka:
+    servers: "kafka:9092"
+    max_retries: 2
+    required_acks: -1
+    ack_timeout: 1
+    retry_backoff: 1
+    connect_timeout: 1
+
+development:
+  <<: *default
+  auth:
+    kind: plaintext
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+  auth:
+    kind: plaintext
+staging: &staging
+  <<: *default
+production:
+  <<: *staging

@@ -26,6 +26,7 @@ loader.push_dir(File.join(__dir__, ".."))
 loader.tag = "sbmt-kafka_producer"
 # Do not load vendors instrumentation components. Those need to be required manually if needed
 loader.ignore("#{__dir__}/kafka_producer/version.rb")
+loader.ignore("#{File.expand_path("../", __dir__)}/generators")
 
 # completely ignore testing helpers
 # because testing.rb just requires some files and does not contain any constants (e.g. Testing) which Zeitwerk expects
