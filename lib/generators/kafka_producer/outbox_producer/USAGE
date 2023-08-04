@@ -1,6 +1,5 @@
 Description:
     Modifies the config/outbox.yml file to work with the outbox gem
-    The argument is specified without "outbox_item"
     Pass in the outbox item, either CamelCased or under_scored
 
 Example:
