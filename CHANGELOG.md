@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.6.1] - 2023-08-07
+
+### Fixed
+
+- Don't catch an exception when publishing through the Sbmt::KafkaProducer::OutboxProducer
+
 ## [0.6.0] - 2023-07-23
 
 ### Added
@@ -24,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- change sentry method from capture_message to capture_exception 
+- change sentry method from capture_message to capture_exception
 
 ## [0.5.0] - 2023-06-26
 

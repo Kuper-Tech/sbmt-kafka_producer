@@ -14,7 +14,7 @@ describe Sbmt::KafkaProducer::OutboxProducer do
 
   describe "#call" do
     it "calls sync_publish with payload and outbox_item options" do
-      expect_any_instance_of(described_class).to receive(:sync_publish).with(payload, partition: 0)
+      expect_any_instance_of(described_class).to receive(:sync_publish!).with(payload, partition: 0)
       outbox_producer.call(outbox_item, payload)
     end
   end
