@@ -16,16 +16,4 @@ describe Sbmt::KafkaProducer::ErrorTracker do
       described_class.error(message)
     end
   end
-
-  describe ".warning" do
-    it "is exception" do
-      expect(Sentry).to receive(:capture_exception).with(error, level: :warning)
-      described_class.warning(error)
-    end
-
-    it "is message" do
-      expect(Sentry).to receive(:capture_message).with(message, level: :warning)
-      described_class.warning(message)
-    end
-  end
 end

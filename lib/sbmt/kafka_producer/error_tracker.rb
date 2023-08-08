@@ -8,13 +8,13 @@ module Sbmt
           logging(:error, arr)
         end
 
-        def warning(arr)
-          logging(:warning, arr)
-        end
-
         private
 
         def logging(level, arr)
+          sentry_logging(level, arr) if ::Sentry.initialized?
+        end
+
+        def sentry_logging(level, arr)
           Sentry.with_scope do |_scope|
             if arr.is_a?(Exception)
               Sentry.capture_exception(arr, level: level)
