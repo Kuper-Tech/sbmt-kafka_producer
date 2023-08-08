@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.6.2] - 2023-08-08
+
+### ### Added
+
+- add ErrorTracker for Sentry
+
 ## [0.6.1] - 2023-08-07
 
 ### Fixed
