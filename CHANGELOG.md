@@ -13,9 +13,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.6.3] - 2023-08-10
+
+### Fixed
+
+- Return True when publishing with bang methods
+
 ## [0.6.2] - 2023-08-08
 
-### ### Added
+### Added
 
 - add ErrorTracker for Sentry
 

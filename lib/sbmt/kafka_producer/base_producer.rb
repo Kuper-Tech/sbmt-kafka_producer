@@ -12,6 +12,7 @@ module Sbmt
         around_publish do
           client.produce_sync(payload: payload, **options.merge(topic: topic))
         end
+        true
       end
 
       def sync_publish(payload, options = {})
@@ -26,6 +27,7 @@ module Sbmt
         around_publish do
           client.produce_async(payload: payload, **options.merge(topic: topic))
         end
+        true
       end
 
       def async_publish(payload, options = {})
