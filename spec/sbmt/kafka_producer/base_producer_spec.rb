@@ -42,6 +42,20 @@ describe Sbmt::KafkaProducer::BaseProducer do
   describe "#sync_publish!" do
     let(:options) { {seed_brokers: "kafka://kafka:9092"} }
 
+    context "when payload is successfully delivered" do
+      before do
+        allow(client).to receive(:produce_async).with(
+          payload: payload,
+          topic: "test_topic",
+          seed_brokers: "kafka://kafka:9092"
+        ).and_return(true)
+      end
+
+      it "produces the payload via the client and returns true" do
+        expect(producer.async_publish!(payload, options)).to be(true)
+      end
+    end
+
     context "when delivery fails with Kafka::DeliveryFailed" do
       before do
         allow(client).to receive(:produce_sync).and_raise(Sbmt::WaterDrop::Errors::ProduceError)
@@ -84,6 +98,20 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
   describe "#async_publish!" do
     let(:options) { {seed_brokers: "kafka://kafka:9092"} }
+
+    context "when payload is successfully delivered" do
+      before do
+        allow(client).to receive(:produce_async).with(
+          payload: payload,
+          topic: "test_topic",
+          seed_brokers: "kafka://kafka:9092"
+        ).and_return(true)
+      end
+
+      it "produces the payload via the client and returns true" do
+        expect(producer.async_publish!(payload, options)).to be(true)
+      end
+    end
 
     context "when delivery fails with Kafka::DeliveryFailed" do
       before do
