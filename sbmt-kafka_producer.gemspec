@@ -44,4 +44,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "combustion", ">= 1.3"
   spec.add_development_dependency "rake", ">= 13.0"
   spec.add_development_dependency "sbmt-dev", ">= 0.7.0"
+  spec.add_development_dependency "opentelemetry-sdk"
+  spec.add_development_dependency "opentelemetry-api", ">= 0.17.0"
+  spec.add_development_dependency "opentelemetry-common", ">= 0.17.0"
+  spec.add_development_dependency "opentelemetry-instrumentation-base", ">= 0.17.0"
 end

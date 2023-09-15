@@ -28,6 +28,8 @@ module Sbmt
           kafka_config.logger = config.logger_class.classify.constantize.new
           kafka_config.kafka = config.to_kafka_options.merge(custom_kafka_config(kafka_options)).symbolize_keys
 
+          kafka_config.middleware = Instrumentation::TracingMiddleware.new
+
           kafka_config.deliver = config.deliver if config.deliver.present?
           kafka_config.wait_on_queue_full = config.wait_on_queue_full if config.wait_on_queue_full.present?
           kafka_config.max_payload_size = config.max_payload_size if config.max_payload_size.present?
