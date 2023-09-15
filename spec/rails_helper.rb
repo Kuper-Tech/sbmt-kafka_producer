@@ -8,6 +8,8 @@ require "combustion"
 # we must require it explicitly to force anyway autoload our configs
 require "anyway/rails" if defined?(Rails::Railtie)
 
+require "sbmt/kafka_producer/instrumentation/open_telemetry_loader"
+
 begin
   Combustion.initialize! :action_controller do
     config.log_level = :fatal if ENV["LOG"].to_s.empty?
