@@ -76,8 +76,22 @@ module Sbmt
       def log_error(error)
         return true if ignore_kafka_errors?
 
-        logger.error "KAFKA ERROR: #{error.message}\n#{error.backtrace.join("\n")}"
+        logger.error "KAFKA ERROR: #{format_exception_error(error)}\n#{error.backtrace.join("\n")}"
         ErrorTracker.error(error)
+      end
+
+      def format_exception_error(error)
+        text = "#{format_exception_error(error.cause)}. " if with_cause?(error)
+
+        if error.respond_to?(:message)
+          "#{text}#{error.class.name} #{error.message}"
+        else
+          "#{text}#{error}"
+        end
+      end
+
+      def with_cause?(error)
+        error.respond_to?(:cause) && error.cause.present?
       end
 
       def config
