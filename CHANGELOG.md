@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [0.8.0] - 2023-10-05
+
+### Added
+
+- Errors' `cause` handling
+
+### Fixed
+
+- change from `double` to `instance_double`
+
 ## [0.7.0] - 2023-09-14
 
 ### Added
