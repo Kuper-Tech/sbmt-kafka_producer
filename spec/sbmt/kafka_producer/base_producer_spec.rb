@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TestWrapError < Sbmt::WaterDrop::Errors::ProduceError
+class TestWrapError < WaterDrop::Errors::ProduceError
   attr_reader :cause
 
   def initialize(message, cause)
@@ -11,10 +11,10 @@ end
 
 describe Sbmt::KafkaProducer::BaseProducer do
   let(:producer) { described_class.new(client: client, topic: topic) }
-  let(:client) { instance_double(Sbmt::WaterDrop::Producer) }
+  let(:client) { instance_double(WaterDrop::Producer) }
   let(:topic) { "test_topic" }
   let(:payload) { {message: "payload"} }
-  let(:error) { Sbmt::WaterDrop::Errors::ProduceError }
+  let(:error) { WaterDrop::Errors::ProduceError }
 
   before do
     allow(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:default_client).and_return(client)

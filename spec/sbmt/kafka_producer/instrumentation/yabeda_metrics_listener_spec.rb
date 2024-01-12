@@ -4,7 +4,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
   describe ".on_statistics_emitted" do
     let(:base_rdkafka_stats) {
       {
-        "client_id" => "sbmt-waterdrop",
+        "client_id" => "waterdrop",
         "brokers" => {
           "kafka:9092/1001" => {
             "name" => "kafka:9092/1001",
@@ -33,7 +33,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
       end
 
       it "reports only broker metrics" do
-        tags = {client: "sbmt-waterdrop", broker: "kafka:9092"}
+        tags = {client: "waterdrop", broker: "kafka:9092"}
         expect {
           described_class.new.on_statistics_emitted(event)
         }.to measure_yabeda_histogram(Yabeda.kafka_api.latency).with_tags(tags)
@@ -49,7 +49,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:tags) do
       {
-        client: "sbmt-waterdrop",
+        client: "waterdrop",
         topic: "topic"
       }
     end
@@ -77,7 +77,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     context "when error type is librdkafka.dispatch_error" do
       let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", topic: "topic", type: "librdkafka.dispatch_error") }
 
-      tags = {client: "sbmt-waterdrop", topic: "topic"}
+      tags = {client: "waterdrop", topic: "topic"}
 
       it "increments producer error counter" do
         expect { described_class.new.on_error_occurred(event) }
@@ -91,7 +91,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_produced_sync", message: topic, time: 25) }
 
-    tags = {client: "sbmt-waterdrop", topic: "topic"}
+    tags = {client: "waterdrop", topic: "topic"}
 
     it "reports produced sync message metrics" do
       expect { described_class.new.on_message_produced_sync(event) }
@@ -105,7 +105,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_produced_async", message: topic, time: 25) }
 
-    tags = {client: "sbmt-waterdrop", topic: "topic"}
+    tags = {client: "waterdrop", topic: "topic"}
 
     it "reports produced async message metrics" do
       expect { described_class.new.on_message_produced_async(event) }
@@ -120,7 +120,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
 
     it "histogram produced buffer size metrics" do
       expect { described_class.new.on_message_buffered(event) }
-        .to measure_yabeda_histogram(Yabeda.kafka_producer.buffer_size).with_tags({client: "sbmt-waterdrop"})
+        .to measure_yabeda_histogram(Yabeda.kafka_producer.buffer_size).with_tags({client: "waterdrop"})
     end
   end
 
@@ -128,7 +128,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_acknowledged", topic: "topic") }
 
-    tags = {client: "sbmt-waterdrop", topic: "topic"}
+    tags = {client: "waterdrop", topic: "topic"}
 
     it "increments produced acknowledged metrics" do
       expect { described_class.new.on_message_acknowledged(event) }

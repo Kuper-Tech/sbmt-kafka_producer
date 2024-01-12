@@ -11,7 +11,6 @@
 Добавить в Gemfile
 ```ruby
 gem "sbmt-kafka_producer", "~> 0.6"
-gem 'sbmt-waterdrop', '~> 2.5'
 ```
 
 Выполнить
@@ -57,7 +56,7 @@ production:
 
 #### Конфигурация: блок `default`
 
-Опции для `sbmt-waterdrop` определены вот [тут](https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb#L25)
+Опции для `waterdrop` определены вот [тут](https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb#L25)
 
 Опция `ignore_kafka_error` кастомная и отключает логирование ошибок в `Rails.logger` и `Sentry`
 

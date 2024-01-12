@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
-require "anyway_config"
-require "sbmt/waterdrop"
+require "zeitwerk"
+require "waterdrop"
 require "connection_pool"
 require "dry-initializer"
 require "dry/types"
 require "dry-struct"
-require "rails/railtie"
 require "sentry-ruby"
 require "yabeda"
-require "zeitwerk"
+require "anyway_config"
+
+require "anyway/rails" if defined?(Rails)
+require_relative "kafka_producer/railtie" if defined?(Rails::Railtie)
 
 module Sbmt
   module KafkaProducer

@@ -3,7 +3,7 @@
 describe Sbmt::KafkaProducer::KafkaClientFactory do
   describe ".default_client" do
     it "returns a ConnectionPool::Wrapper with a WaterDrop::Producer inside" do
-      expect(described_class.default_client.with { |producer| producer }).to be_instance_of(Sbmt::WaterDrop::Producer)
+      expect(described_class.default_client.with { |producer| producer }).to be_instance_of(WaterDrop::Producer)
     end
   end
 
@@ -18,7 +18,7 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
       let(:kafka_config) { {seed_brokers: "kafka://localhost:9092", producer: {connect_timeout: "10s"}} }
 
       it "returns a ConnectionPool::Wrapper with a WaterDrop::Producer inside" do
-        expect(described_class.build(kafka_config).with { |producer| producer }).to be_instance_of(Sbmt::WaterDrop::Producer)
+        expect(described_class.build(kafka_config).with { |producer| producer }).to be_instance_of(WaterDrop::Producer)
       end
     end
   end

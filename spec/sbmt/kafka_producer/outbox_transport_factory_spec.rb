@@ -10,7 +10,7 @@ describe Sbmt::KafkaProducer::OutboxTransportFactory do
     end
 
     it "passes the topic and a client to OutboxProducer" do
-      client = instance_double(Sbmt::WaterDrop::Producer)
+      client = instance_double(WaterDrop::Producer)
 
       expect(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:build).with(kafka_config).and_return(client)
       expect(Sbmt::KafkaProducer::OutboxProducer).to receive(:new).with(topic: topic, client: client)

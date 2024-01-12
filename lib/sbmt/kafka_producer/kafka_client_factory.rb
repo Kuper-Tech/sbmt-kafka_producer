@@ -6,7 +6,7 @@ module Sbmt
       class << self
         def default_client
           @default_client ||= ConnectionPool::Wrapper.new do
-            Sbmt::WaterDrop::Producer.new do |config|
+            WaterDrop::Producer.new do |config|
               configure_client(config)
             end
           end
@@ -16,7 +16,7 @@ module Sbmt
           return default_client if kafka.empty?
 
           ConnectionPool::Wrapper.new do
-            Sbmt::WaterDrop::Producer.new do |config|
+            WaterDrop::Producer.new do |config|
               configure_client(config, kafka)
             end
           end

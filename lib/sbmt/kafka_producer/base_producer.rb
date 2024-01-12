@@ -18,7 +18,7 @@ module Sbmt
       def sync_publish(payload, options = {})
         sync_publish!(payload, options)
         true
-      rescue Sbmt::WaterDrop::Errors::ProduceError => e
+      rescue WaterDrop::Errors::ProduceError => e
         log_error(e)
         false
       end
@@ -33,7 +33,7 @@ module Sbmt
       def async_publish(payload, options = {})
         async_publish!(payload, options)
         true
-      rescue Sbmt::WaterDrop::Errors::ProduceError => e
+      rescue WaterDrop::Errors::ProduceError => e
         log_error(e)
         false
       end

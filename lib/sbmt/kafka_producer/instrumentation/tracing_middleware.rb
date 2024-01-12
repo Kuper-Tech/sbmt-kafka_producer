@@ -3,7 +3,7 @@
 module Sbmt
   module KafkaProducer
     module Instrumentation
-      class TracingMiddleware < ::Sbmt::WaterDrop::Middleware
+      class TracingMiddleware < ::WaterDrop::Middleware
         def initialize
           super
 
