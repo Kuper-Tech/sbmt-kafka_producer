@@ -3,7 +3,7 @@
 describe Sbmt::KafkaProducer::OutboxProducer do
   subject(:outbox_producer) { described_class.new(client: client, topic: topic) }
 
-  let(:client) { instance_double(Sbmt::WaterDrop::Producer) }
+  let(:client) { instance_double(WaterDrop::Producer) }
   let(:topic) { "test_topic" }
   let(:payload) { {message: "payload"} }
   let(:outbox_item) { double("OutboxItem", options: {partition: 0}) }

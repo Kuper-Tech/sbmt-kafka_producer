@@ -4,7 +4,7 @@ module Sbmt
   module KafkaProducer
     module Instrumentation
       class YabedaMetricsListener
-        DEFAULT_CLIENT = {client: "sbmt-waterdrop"}.freeze
+        DEFAULT_CLIENT = {client: "waterdrop"}.freeze
         def on_statistics_emitted(event)
           # https://github.com/confluentinc/librdkafka/blob/master/STATISTICS.md
           stats = event.payload[:statistics]
@@ -27,7 +27,7 @@ module Sbmt
         end
 
         %i[produced_sync produced_async].each do |event_scope|
-          define_method("on_message_#{event_scope}") do |event|
+          define_method(:"on_message_#{event_scope}") do |event|
             Yabeda.kafka_producer.produced_messages
               .increment(produce_base_tags(event))
 
