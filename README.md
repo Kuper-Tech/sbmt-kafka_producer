@@ -1,70 +1,99 @@
 # Sbmt::KafkaProducer
 
+This gem is used for producing Kafka messages. It represents a wrapper over [waterdrop](https://github.com/karafka/waterdrop) gem and is recommended for using as a transport with [sbmt-outbox][https://github.com/sberMarket-Tech/sbmt-outbox] gem.
 
-## Гем для продюсинга сообщений из kafka
+## Installation
 
-- представляет собой абстракцию над используемым кафка-клиентом (на данный момент это karafka 2)
-- предоставляет более удобное конфигурирование продюсеров, а также возможность использования [Outbox Pattern](https://gitlab.sbmt.io/paas/rfc/-/tree/master/text/paas-2219-outbox) из коробки совместно с гемом [Outbox](https://gitlab.sbmt.io/nstmrt/rubygems/outbox)
+Add this line to your application's Gemfile:
 
-## Подключение и конфигурация
-
-Добавить в Gemfile
 ```ruby
-gem "sbmt-kafka_producer", "~> 0.6"
+gem "sbmt-kafka_producer"
 ```
 
-Выполнить
+And then execute:
+
 ```bash
 bundle install
 ```
 
-Создать и настроить конфигурационный файл config/kafka_producer.yml.
-Для быстрой настройки см. раздел [Генераторы](#генераторы).
-Пример (см. описание в разделах ниже):
+## Auto configuration
+
+We recommend going through configuration and files creation with the following Rails generators.
+
+Each generator can be run using the `--help` option to learn more about the available arguments.
+
+### Initial configuration
+
+If you plug the gem into your application for the first time, you can generate the initial configuration:
+
+```shell
+rails g kafka_producer:install
+```
+
+In the result, the `config/kafka_producer.yml` file will be created.
+
+### Producer class
+
+A producer class can be generated with the following command:
+
+```shell
+rails g kafka_producer:producer MaybeNamespaced::Name sync topic
+```
+
+In the result, the sync producer will be created.
+
+### Outbox producer
+
+To generate an outbox producer for using with gem [sbmt-outbox](https://github.com/sberMarket-Tech/sbmt-outbox) run the following command:
+
+```shell
+rails g kafka_producer:outbox_producer SomeOutboxItem
+```
+
+## Manual configuration
+
+The `config/kafka_producer.yml` file is a main config for the gem.
 
 ```yaml
 default: &default
   deliver: true
+  ignore_kafka_error: true
+  # see more options at https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb
   wait_on_queue_full: true
   max_payload_size: 1000012
   max_wait_timeout: 5
   wait_timeout: 0.005
-  ignore_kafka_error: true
   auth:
     kind: plaintext
   kafka:
-    servers: "kafka:9092"
-    max_retries: 2 # message.send.max.retries default: 2
-    required_acks: -1 # request.required.acks default: -1
-    ack_timeout: 1 # request.timeout.ms, указывается числов в секундах default: 1
-    retry_backoff: 1 # retry.backoff.ms, указывается числов в секундах default: 1
-    connect_timeout: 1 # socket.connection.setup.timeout.ms, указывается числов в секундах default: 1
-    kafka_config:
+    servers: "kafka:9092" # required
+    max_retries: 2 # optional, default: 2
+    required_acks: -1 # optional, default: -1
+    ack_timeout: 1 # in seconds, optional, default: 1
+    retry_backoff: 1 # in seconds, optional, default: 1
+    connect_timeout: 1 # in seconds, optional, default: 1
+    kafka_config: # low-level custom Kafka options
       queue.buffering.max.messages: 1
       queue.buffering.max.ms: 10_000
+
 development:
-  <<: *default 
+  <<: *default
+
 test:
   <<: *default
   deliver: false
   wait_on_queue_full: false
-staging: &staging
-  <<: *default
+
 production:
-  <<: *staging
+  <<: *default
 ```
 
-#### Конфигурация: блок `default`
+### `auth` config section
 
-Опции для `waterdrop` определены вот [тут](https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb#L25)
+The gem supports 2 variants: plaintext (default) and SASL-plaintext
 
-Опция `ignore_kafka_error` кастомная и отключает логирование ошибок в `Rails.logger` и `Sentry`
+SASL-plaintext:
 
-#### Конфигурация: блок `auth`
-
-Поддерживаются две версии: plaintext (дефолт, если не указывать) и SASL-plaintext
-
-Вариант конфигурации SASL-plaintext:
 ```yaml
 auth:
   kind: sasl_plaintext
@@ -73,147 +102,65 @@ auth:
   sasl_mechanism: SCRAM-SHA-512
 ```
 
-#### Конфигурация: блок `kafka`
+### `kafka` config section
 
-Обязательной опцией является `servers` в формате rdkafka (**без префикса схемы** `kafka://`): `srv1:port1,srv2:port2,...`
-В разделе `kafka_config` можно указать (любые опции rdkafka)[https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md]
+The `servers` key is required and should be in rdkafka format: without `kafka://` prefix, for example: `srv1:port1,srv2:port2,...`.
 
-## Генераторы
+The `kafka_config` section may contain any [rdkafka option](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
 
-Для упрощения настройки и создания producer реализованы rails-генераторы
+### Producer class
 
-### Настройка первоначальной конфигурации гема
-
-Если подключаете sbmt-kafka_producer в свое приложения впервые, можно сгенерировать первоначальную базовую конфигурацию:
-
-```shell
-bundle exec rails g kafka_producer:install
-```
-
-В результате будут создан основной конфиг гема
-
-### Создание producer
-
-Сгенерировать producer можно следующим образом:
-
-```shell
-bundle exec rails g kafka_producer:producer MaybeNamespaced::Name sync topic
-```
-
-В результате будет создан базовый продюсер для синхронного стриминга в кафку
-
-Более подробно перечень опций генератора можно посмотреть в help:
-
-```shell
-bin/rails generate kafka_producer:producer --help
-```
-
-### Создание outbox_producer
-
-Для использования совместно с гемом [outbox](https://gitlab.sbmt.io/nstmrt/rubygems/outbox), нужно выполнить:
-
-```shell
-bundle exec rails g kafka_producer:outbox_producer name
-```
-
-В результате будут внесены изменения в `config/outbox.yaml` для вашего outbox_item
-
-### Конфигурация `producer` (не outbox) пример:
-
-- Создать базовый класс `applicaton_producer.rb` в `app/producers/`
+To create a producer that will be responsible for sending message to Kafka, copy the following code:
 
 ```ruby
-# frozen_string_literal: true
+# app/producers/some_producer.rb
+class SomeProducer < Sbmt::KafkaProducer::BaseProducer
+  option :topic, default: -> { "topic" }
 
-class ApplicationProducer < Sbmt::KafkaProducer::BaseProducer; end
-```
-
-- Создать `producer`, который будет продюсить сообщения:
-
-**Синхронный**
-```ruby
-# frozen_string_literal: true
-
-class SomeProducer < ApplicationProducer
-  option :topic, default: -> { 'topic' }
-
-  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
+  def publish(payload, **options)
     sync_publish(payload, options)
+    # async_publish(payload, options)
   end
 end
 ```
 
-**Асинхронный**
-```ruby
-# frozen_string_literal: true
+### Outbox producer config
 
-class SomeProducer < ApplicationProducer
-  option :topic, default: -> { 'topic' }
-
-  def publish(payload, options) # options - не обязательный и должен быть в виде хэша
-    async_publish(payload, options)
-  end
-end
-```
-
-- Продюсить сообщения в кафку:
-
-```ruby
-SomeProducer.new.publish(payload)
-```
-
-### Конфигурация `producer` (outbox) пример:
-
-В файл `config/outbox.yml` добавить секицю `transports`
+Add the following lines to your `config/outbox.yml` file at the `transports` section:
 
 ```yaml
 outbox_items:
-  export_outbox_item:
+  some_outbox_item:
     transports:
       sbmt/kafka_producer:
         topic: 'topic'
-        kafka:
+        kafka: # optional kafka options
           required_acks: -1
 ```
 
-### Метрики
+## Usage
 
-#### Yabeda
-Гем собирает базовые продюсинг метрики в yabeda, см. `YabedaConfigurer`
-Для начала работы достаточно в основном приложении подключить любой поддерживаемый yabeda-экспортер (например, `yabeda-prometheus-mmap`) и метрики станут доступны из коробки
-
-**NOTE:** При использовании **Yabeda** в **rails** приложении необходимо добавить:
+To send a message to a Kafka topic, execute the following:
 
 ```ruby
-# We must manually require this file because Yabeda gem depends on Anyway gem
-# and is loaded as a Puma plugin before Rails initialization.
-require "anyway/rails"
+SomeProducer.new.publish(payload, key: "123", headers: {"some-header" => "some-value"})
 ```
 
-в `config/application.rb` после `Bundler.require`
+## Metrics
 
-#### Sentry
+The gem collects base producing metrics using [Yabeda](https://github.com/yabeda-rb/yabeda). See metrics at [YabedaConfigurer](./lib/sbmt/kafka_producer/yabeda_configurer.rb).
 
-По дефолту `Sentry` отключен, для его использования необходимо сначала [сконфигурировать](https://docs.sentry.io/platforms/ruby/?original_referrer=https%3A%2F%2Fgithub.com%2Fgetsentry%2Fsentry-ruby%3Ftab%3Dreadme-ov-file) `Sentry`
+## Testing
 
-### RSpec
+To stub a producer request to real Kafka broker, you can use a mock. To do this, please add `require "sbmt/kafka_producer/testing"` to the `spec/rails_helper.rb`.
 
-Так как при тестирование **producer** пытается создать соединение с кафкой, необходимо в `spec/rails_helper.rb` добавить `require 'sbmt/kafka_producer/testing'`
-Это из коробки создает `mock` объекта
+## Development
 
-## Разработка
+Install [dip](https://github.com/bibendi/dip).
 
-### Локальное окружение
+And run:
 
-1. Подготовка рабочего окружения
 ```shell
 dip provision
-```
-2. Запуск тестов
-```shell
 dip rspec
-```
-3. Запуск сервера
-```shell
-dip up
 ```
