@@ -178,6 +178,7 @@ outbox_items:
 
 ### Метрики
 
+#### Yabeda
 Гем собирает базовые продюсинг метрики в yabeda, см. `YabedaConfigurer`
 Для начала работы достаточно в основном приложении подключить любой поддерживаемый yabeda-экспортер (например, `yabeda-prometheus-mmap`) и метрики станут доступны из коробки
 
@@ -190,6 +191,10 @@ require "anyway/rails"
 ```
 
 в `config/application.rb` после `Bundler.require`
+
+#### Sentry
+
+По дефолту `Sentry` отключен, для его использования необходимо сначала [сконфигурировать](https://docs.sentry.io/platforms/ruby/?original_referrer=https%3A%2F%2Fgithub.com%2Fgetsentry%2Fsentry-ruby%3Ftab%3Dreadme-ov-file) `Sentry`
 
 ### RSpec
 
