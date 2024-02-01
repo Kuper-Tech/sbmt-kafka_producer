@@ -11,6 +11,8 @@ module Sbmt
         private
 
         def logging(level, arr)
+          return unless defined?(::Sentry)
+
           sentry_logging(level, arr) if ::Sentry.initialized?
         end
 

@@ -6,7 +6,6 @@ require "connection_pool"
 require "dry-initializer"
 require "dry/types"
 require "dry-struct"
-require "sentry-ruby"
 require "yabeda"
 require "anyway_config"
 

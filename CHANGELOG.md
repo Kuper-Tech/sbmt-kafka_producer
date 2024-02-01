@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.0.0] - 2024-01-29
+
+### Changed
+
+- Remove `sbmt-dev`
+
 ## [1.0.0] - 2024-01-12
 
 ### Added

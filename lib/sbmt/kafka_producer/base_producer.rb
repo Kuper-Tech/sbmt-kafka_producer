@@ -49,6 +49,7 @@ module Sbmt
       end
 
       def with_sentry_transaction
+        return yield unless defined?(::Sentry)
         return yield unless ::Sentry.initialized?
 
         transaction = ::Sentry.start_transaction(

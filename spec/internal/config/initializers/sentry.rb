@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "sentry-ruby"
+
 SENTRY_DUMMY_DSN = "http://12345:67890@sentry.localdomain/sentry/42"
 Sentry.init do |config|
   config.dsn = SENTRY_DUMMY_DSN
