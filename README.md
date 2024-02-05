@@ -1,6 +1,6 @@
 # Sbmt::KafkaProducer
 
-This gem is used for producing Kafka messages. It represents a wrapper over [waterdrop](https://github.com/karafka/waterdrop) gem and is recommended for using as a transport with [sbmt-outbox][https://github.com/sberMarket-Tech/sbmt-outbox] gem.
+This gem is used for producing Kafka messages. It represents a wrapper over [waterdrop](https://github.com/karafka/waterdrop) gem and is recommended for using as a transport with [sbmt-outbox][https://github.com/SberMarket-Tech/sbmt-outbox] gem.
 
 ## Installation
 
@@ -44,7 +44,7 @@ In the result, the sync producer will be created.
 
 ### Outbox producer
 
-To generate an outbox producer for using with gem [sbmt-outbox](https://github.com/sberMarket-Tech/sbmt-outbox) run the following command:
+To generate an outbox producer for using with gem [sbmt-outbox](https://github.com/SberMarket-Tech/sbmt-outbox) run the following command:
 
 ```shell
 rails g kafka_producer:outbox_producer SomeOutboxItem

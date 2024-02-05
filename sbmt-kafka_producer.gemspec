@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Gem for producing messages from kafka"
   spec.description = spec.summary
-  spec.homepage = "https://github.com/sberMarket-Tech/sbmt-kafka_producer"
+  spec.homepage = "https://github.com/SberMarket-Tech/sbmt-kafka_producer"
   spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
