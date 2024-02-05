@@ -18,7 +18,7 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
   TargetRubyVersion: 2.7
-  TargetRailsVersion: 5.1
+  TargetRailsVersion: 5.2
 
 RSpec/FilePath:
   Enabled: false
