@@ -4,6 +4,7 @@ require_relative "lib/sbmt/kafka_producer/version"
 
 Gem::Specification.new do |spec|
   spec.name = "sbmt-kafka_producer"
+  spec.license = "MIT"
   spec.version = Sbmt::KafkaProducer::VERSION
   spec.authors = ["Sbermarket Ruby-Platform Team"]
 
