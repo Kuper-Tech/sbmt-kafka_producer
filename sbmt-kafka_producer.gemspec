@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version = Sbmt::KafkaProducer::VERSION
   spec.authors = ["Sbermarket Ruby-Platform Team"]
 
-  spec.summary = "Gem for producing messages from kafka"
-  spec.description = spec.summary
+  spec.summary = "Ruby gem for producing Kafka messages"
+  spec.description = "This gem is used for producing Kafka messages. It represents a wrapper over Waterdrop gem and is recommended for using as a transport with sbmt-outbox"
   spec.homepage = "https://github.com/SberMarket-Tech/sbmt-kafka_producer"
   spec.required_ruby_version = ">= 2.7.0"
 
