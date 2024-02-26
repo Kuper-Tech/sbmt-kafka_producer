@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "yabeda", ">= 0.11"
 
   spec.add_development_dependency "appraisal", ">= 2.4"
-  spec.add_development_dependency "bundler", ">= 2.3"
+  spec.add_development_dependency "bundler", ">= 2.1"
   spec.add_development_dependency "combustion", ">= 1.3"
   spec.add_development_dependency "opentelemetry-sdk"
   spec.add_development_dependency "opentelemetry-api", ">= 0.17.0"
