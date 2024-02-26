@@ -1,5 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/sbmt-kafka_producer.svg)](https://badge.fury.io/rb/sbmt-kafka_producer)
-[![Build Status](https://github.com/SberMarket-Tech/sbmt-kafka_producer/workflows/Ruby/badge.svg?branch=master)](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions?query=branch%3Amaster)
+[![Build Status](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions?query=branch%3Amaster)
 
 # Sbmt-KafkaProducer
 
