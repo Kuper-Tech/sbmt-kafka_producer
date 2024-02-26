@@ -1,4 +1,7 @@
-# Sbmt::KafkaProducer
+[![Gem Version](https://badge.fury.io/rb/sbmt-kafka_producer.svg)](https://badge.fury.io/rb/sbmt-kafka_producer)
+[![Build Status](https://github.com/SberMarket-Tech/sbmt-kafka_producer/workflows/Ruby/badge.svg?branch=master)](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions?query=branch%3Amaster)
+
+# Sbmt-KafkaProducer
 
 This gem is used for producing Kafka messages. It represents a wrapper over [waterdrop](https://github.com/karafka/waterdrop) gem and is recommended for using as a transport with [sbmt-outbox][https://github.com/SberMarket-Tech/sbmt-outbox] gem.
 
