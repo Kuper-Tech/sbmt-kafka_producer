@@ -3,11 +3,11 @@
 
 # Sbmt-KafkaProducer
 
-This gem is used for producing Kafka messages. It represents a wrapper over [waterdrop](https://github.com/karafka/waterdrop) gem and is recommended for using as a transport with [sbmt-outbox][https://github.com/SberMarket-Tech/sbmt-outbox] gem.
+This gem is used to produce Kafka messages. It is a wrapper over the [waterdrop](https://github.com/karafka/waterdrop) gem, and it is recommended for use as a transport with the [sbmt-outbox](https://github.com/SberMarket-Tech/sbmt-outbox) gem.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your app's Gemfile:
 
 ```ruby
 gem "sbmt-kafka_producer"
@@ -21,9 +21,7 @@ bundle install
 
 ## Auto configuration
 
-We recommend going through configuration and files creation with the following Rails generators.
-
-Each generator can be run using the `--help` option to learn more about the available arguments.
+We recommend going through the configuration and file creation process using the following Rails generators. Each generator can be run by using the `--help` option to learn more about the available arguments.
 
 ### Initial configuration
 
@@ -33,7 +31,7 @@ If you plug the gem into your application for the first time, you can generate t
 rails g kafka_producer:install
 ```
 
-In the result, the `config/kafka_producer.yml` file will be created.
+As a result, the `config/kafka_producer.yml` file will be created.
 
 ### Producer class
 
@@ -43,11 +41,11 @@ A producer class can be generated with the following command:
 rails g kafka_producer:producer MaybeNamespaced::Name sync topic
 ```
 
-In the result, the sync producer will be created.
+As the result, a sync producer will be created.
 
 ### Outbox producer
 
-To generate an outbox producer for using with gem [sbmt-outbox](https://github.com/SberMarket-Tech/sbmt-outbox) run the following command:
+To generate an Outbox producer for use with Gem [sbmt-Outbox](https://github.com/SberMarket-Tech/sbmt-outbox), run the following command:
 
 ```shell
 rails g kafka_producer:outbox_producer SomeOutboxItem
@@ -55,7 +53,7 @@ rails g kafka_producer:outbox_producer SomeOutboxItem
 
 ## Manual configuration
 
-The `config/kafka_producer.yml` file is a main config for the gem.
+The `config/kafka_producer.yml` file is the main configuration for this gem.
 
 ```yaml
 default: &default
@@ -113,7 +111,7 @@ The `kafka_config` section may contain any [rdkafka option](https://github.com/c
 
 ### Producer class
 
-To create a producer that will be responsible for sending message to Kafka, copy the following code:
+To create a producer that will be responsible for sending messages to Kafka, copy the following code:
 
 ```ruby
 # app/producers/some_producer.rb
@@ -129,7 +127,7 @@ end
 
 ### Outbox producer config
 
-Add the following lines to your `config/outbox.yml` file at the `transports` section:
+Add the following lines to your `config/outbox.yml` file in the `transports` section:
 
 ```yaml
 outbox_items:
@@ -143,7 +141,7 @@ outbox_items:
 
 ## Usage
 
-To send a message to a Kafka topic, execute the following:
+To send a message to a Kafka topic, execute the following command:
 
 ```ruby
 SomeProducer.new.publish(payload, key: "123", headers: {"some-header" => "some-value"})
