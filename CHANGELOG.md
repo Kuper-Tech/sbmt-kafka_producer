@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.1.0] - 2024-03-14
+
+### Changed
+
+- Memoize kafka clients. Add a registry with them to KafkaClientFactory.
+
 ## [2.0.0] - 2024-01-29
 
 ### Changed
