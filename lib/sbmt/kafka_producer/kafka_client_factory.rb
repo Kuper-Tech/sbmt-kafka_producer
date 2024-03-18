@@ -3,6 +3,9 @@
 module Sbmt
   module KafkaProducer
     class KafkaClientFactory
+      CLIENTS_REGISTRY_MUTEX = Mutex.new
+      CLIENTS_REGISTRY = {}
+
       class << self
         def default_client
           @default_client ||= ConnectionPool::Wrapper.new do
@@ -15,14 +18,26 @@ module Sbmt
         def build(kafka = {})
           return default_client if kafka.empty?
 
-          ConnectionPool::Wrapper.new do
-            WaterDrop::Producer.new do |config|
-              configure_client(config, kafka)
+          fetch_client(kafka) do
+            ConnectionPool::Wrapper.new do
+              WaterDrop::Producer.new do |config|
+                configure_client(config, kafka)
+              end
             end
           end
         end
 
         private
+
+        def fetch_client(kafka)
+          key = Digest::SHA1.hexdigest(Marshal.dump(kafka))
+          return CLIENTS_REGISTRY[key] if CLIENTS_REGISTRY.key?(key)
+
+          CLIENTS_REGISTRY_MUTEX.synchronize do
+            return CLIENTS_REGISTRY[key] if CLIENTS_REGISTRY.key?(key)
+            CLIENTS_REGISTRY[key] = yield
+          end
+        end
 
         def configure_client(kafka_config, kafka_options = {})
           kafka_config.logger = config.logger_class.classify.constantize.new

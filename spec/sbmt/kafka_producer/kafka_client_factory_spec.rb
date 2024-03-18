@@ -20,6 +20,11 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
       it "returns a ConnectionPool::Wrapper with a WaterDrop::Producer inside" do
         expect(described_class.build(kafka_config).with { |producer| producer }).to be_instance_of(WaterDrop::Producer)
       end
+
+      it "always returns the same client" do
+        client = described_class.build(kafka_config)
+        expect(described_class.build(kafka_config).object_id).to eq client.object_id
+      end
     end
   end
 
