@@ -15,6 +15,19 @@ describe Sbmt::KafkaProducer::BaseProducer do
   let(:topic) { "test_topic" }
   let(:payload) { {message: "payload"} }
   let(:error) { WaterDrop::Errors::ProduceError }
+  let(:delivery_report) do
+    instance_double(Rdkafka::Producer::DeliveryReport,
+      error: nil,
+      label: nil,
+      offset: 0,
+      partition: 0,
+      topic_name: "my_topic")
+  end
+  let(:delivery_handle) do
+    instance_double(Rdkafka::Producer::DeliveryHandle,
+      label: nil,
+      wait: delivery_report)
+  end
 
   before do
     allow(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:default_client).and_return(client)
@@ -29,7 +42,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(true)
+        ).and_return(delivery_report)
       end
 
       it "produces the payload via the client and returns true" do
@@ -70,15 +83,15 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
     context "when payload is successfully delivered" do
       before do
-        allow(client).to receive(:produce_async).with(
+        allow(client).to receive(:produce_sync).with(
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(true)
+        ).and_return(delivery_report)
       end
 
       it "produces the payload via the client and returns true" do
-        expect(producer.async_publish!(payload, options)).to be(true)
+        expect(producer.sync_publish!(payload, options)).to be(true)
       end
     end
 
@@ -102,7 +115,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(true)
+        ).and_return(delivery_handle)
       end
 
       it "produces the payload via the client and returns true" do
@@ -147,7 +160,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(true)
+        ).and_return(delivery_handle)
       end
 
       it "produces the payload via the client and returns true" do

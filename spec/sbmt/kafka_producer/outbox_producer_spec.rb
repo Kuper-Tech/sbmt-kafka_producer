@@ -20,8 +20,17 @@ describe Sbmt::KafkaProducer::OutboxProducer do
   end
 
   describe "#sync_publish" do
+    let(:delivery_report) do
+      instance_double(Rdkafka::Producer::DeliveryReport,
+        error: nil,
+        label: nil,
+        offset: 0,
+        partition: 0,
+        topic_name: "my_topic")
+    end
+
     it "calls client.produce_sync with payload and merged options" do
-      expect(client).to receive(:produce_sync).with(payload: payload, topic: topic, partition: 0)
+      expect(client).to receive(:produce_sync).with(payload: payload, topic: topic, partition: 0).and_return(delivery_report)
       outbox_producer.sync_publish(payload, partition: 0)
     end
   end

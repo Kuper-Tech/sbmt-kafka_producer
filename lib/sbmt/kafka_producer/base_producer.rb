@@ -9,9 +9,10 @@ module Sbmt
       option :topic
 
       def sync_publish!(payload, options = {})
-        around_publish do
+        report = around_publish do
           client.produce_sync(payload: payload, **options.merge(topic: topic))
         end
+        log_success(report)
         true
       end
 
@@ -79,6 +80,10 @@ module Sbmt
 
         logger.error "KAFKA ERROR: #{format_exception_error(error)}\n#{error.backtrace.join("\n")}"
         ErrorTracker.error(error)
+      end
+
+      def log_success(report)
+        logger.info "Message has been successfully sent to Kafka - topic: #{report.topic_name}, partition: #{report.partition}, offset: #{report.offset}"
       end
 
       def format_exception_error(error)

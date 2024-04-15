@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "ostruct"
+
 describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
   describe ".on_statistics_emitted" do
     let(:base_rdkafka_stats) {

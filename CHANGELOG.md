@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.2.0] - 2024-04-12
+
+### Changed
+
+- Add logs with `offset`.
+
 ## [2.1.0] - 2024-03-14
 
 ### Changed
