@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.2.1] - 2024-06-07
+
+### Changed
+
+- Drop support for Rails 5
+- Temporary limit upper version of Waterdrop to less than 2.7
+
 ## [2.2.0] - 2024-04-12
 
 ### Changed
