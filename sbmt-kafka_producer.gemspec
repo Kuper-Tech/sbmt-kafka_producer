@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "connection_pool"
   spec.add_dependency "dry-initializer", "~> 3.0"
   spec.add_dependency "dry-struct"
-  spec.add_dependency "waterdrop", "~> 2.5"
+  spec.add_dependency "waterdrop", "~> 2.5", "< 2.7" # BREAKING: undefined method `wait_timeout='' for #<Karafka::Core::Configurable::Node`
   spec.add_dependency "zeitwerk", "~> 2.6"
   spec.add_dependency "yabeda", ">= 0.11"
 
