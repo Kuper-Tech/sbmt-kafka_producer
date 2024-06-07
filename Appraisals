@@ -3,12 +3,10 @@
 # See compatibility table at https://www.fastruby.io/blog/ruby/rails/versions/compatibility-table.html
 
 versions_map = {
-  "5.1" => %w[2.7],
-  "5.2" => %w[2.7],
   "6.0" => %w[2.7],
   "6.1" => %w[2.7 3.0],
   "7.0" => %w[3.1],
-  "7.1" => %w[3.2]
+  "7.1" => %w[3.2, 3.3]
 }
 
 current_ruby_version = RUBY_VERSION.split(".").first(2).join(".")

@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "opentelemetry-common", ">= 0.17.0"
   spec.add_development_dependency "opentelemetry-instrumentation-base", ">= 0.17.0"
   spec.add_development_dependency "rake", ">= 13.0"
-  spec.add_development_dependency "rails", ">= 5.2"
+  spec.add_development_dependency "rails", ">= 6.0"
   spec.add_development_dependency "rspec", ">= 3.0"
   spec.add_development_dependency "rspec_junit_formatter", ">= 0.6"
   spec.add_development_dependency "rspec-rails", ">= 4.0"
