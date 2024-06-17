@@ -27,7 +27,7 @@ module Sbmt
         end
 
         %i[produced_sync produced_async].each do |event_scope|
-          define_method("on_message_#{event_scope}") do |event|
+          define_method(:"on_message_#{event_scope}") do |event|
             Yabeda.kafka_producer.produced_messages
               .increment(produce_base_tags(event))
 
@@ -71,7 +71,7 @@ module Sbmt
             }
 
             Yabeda.kafka_api.calls
-              .increment(broker_tags, by: broker_statistics["tx"])
+              .increment(broker_tags, by: broker_statistics["tx_d"])
             Yabeda.kafka_api.latency
               .measure(broker_tags, broker_statistics["rtt"]["avg"])
             Yabeda.kafka_api.request_size
@@ -79,7 +79,7 @@ module Sbmt
             Yabeda.kafka_api.response_size
               .measure(broker_tags, broker_statistics["rxbytes"])
             Yabeda.kafka_api.errors
-              .increment(broker_tags, by: broker_statistics["txerrs"] + broker_statistics["rxerrs"])
+              .increment(broker_tags, by: broker_statistics["txerrs_d"] + broker_statistics["rxerrs_d"])
           end
         end
       end
