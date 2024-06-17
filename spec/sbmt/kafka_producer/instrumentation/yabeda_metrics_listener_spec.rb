@@ -12,12 +12,12 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
             "name" => "kafka:9092/1001",
             "nodeid" => 1001,
             "nodename" => "kafka:9092",
-            "tx" => 7,
+            "tx_d" => 7,
             "txbytes" => 338,
-            "txerrs" => 0,
+            "txerrs_d" => 0,
             "rx" => 7,
             "rxbytes" => 827,
-            "rxerrs" => 0,
+            "rxerrs_d" => 0,
             "rtt" => {
               "avg" => 1984
             }
