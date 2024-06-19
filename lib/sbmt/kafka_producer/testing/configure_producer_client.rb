@@ -1,13 +1,23 @@
 # frozen_string_literal: true
 
-RSpec.configure do |config|
-  config.before(:each) do
-    allow(Sbmt::KafkaProducer::KafkaClientFactory)
-      .to receive(:default_client)
-      .and_return(instance_double(Sbmt::WaterDrop::Producer, {produce_sync: true, produce_async: true}))
+class FakeWaterDropClient
+  def produce_sync(*)
+    # no op
+  end
 
-    allow(Sbmt::KafkaProducer::KafkaClientFactory)
-      .to receive(:build)
-      .and_return(instance_double(Sbmt::WaterDrop::Producer, {produce_sync: true, produce_async: true}))
+  def produce_async(*)
+    # no op
   end
 end
+
+Sbmt::KafkaProducer::KafkaClientFactory.singleton_class.prepend(
+  Module.new do
+    def default_client
+      @default_client ||= FakeWaterDropClient.new
+    end
+
+    def build(*)
+      @default_client ||= FakeWaterDropClient.new
+    end
+  end
+)
