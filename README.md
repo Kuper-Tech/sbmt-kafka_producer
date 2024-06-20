@@ -157,7 +157,7 @@ The gem collects base producing metrics using [Yabeda](https://github.com/yabeda
 
 ## Testing
 
-To stub a producer request to real Kafka broker, you can use a mock. To do this, please add `require "sbmt/kafka_producer/testing"` to the `spec/rails_helper.rb`.
+To stub a producer request to real Kafka broker, you can use a fake class. To do this, please add `require "sbmt/kafka_producer/testing"` to the `spec/rails_helper.rb`.
 
 ## Development
 
