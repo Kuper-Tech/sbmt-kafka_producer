@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.2.3] - 2024-06-20
+
+### Fixed
+
+- Remove mock for producer client
+- A singleton class of the producer client has been added for testing
+
 ## [2.2.2] - 2024-06-15
 
 ### Fixed
