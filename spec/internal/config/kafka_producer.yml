@@ -2,8 +2,7 @@ default: &default
   deliver: true
   wait_on_queue_full: true
   max_payload_size: 1000012
-  max_wait_timeout: 5
-  wait_timeout: 0.005
+  max_wait_timeout: 60000
   ignore_kafka_error: true
   auth:
     kind: plaintext
@@ -11,12 +10,13 @@ default: &default
     servers: "kafka:9092"
     max_retries: 2
     required_acks: -1
-    ack_timeout: 1
-    retry_backoff: 1
-    connect_timeout: 1
+    ack_timeout: 1000
+    retry_backoff: 1000
+    connect_timeout: 2000
+    message_timeout: 55000
     kafka_config:
       queue.buffering.max.messages: 1
-      queue.buffering.max.ms: 10_000
+      queue.buffering.max.ms: 10000
 
 development:
   <<: *default

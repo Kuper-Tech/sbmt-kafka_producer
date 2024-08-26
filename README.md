@@ -1,9 +1,9 @@
 [![Gem Version](https://badge.fury.io/rb/sbmt-kafka_producer.svg)](https://badge.fury.io/rb/sbmt-kafka_producer)
-[![Build Status](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/SberMarket-Tech/sbmt-kafka_producer/actions?query=branch%3Amaster)
+[![Build Status](https://github.com/Kuper-Tech/sbmt-kafka_producer/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/Kuper-Tech/sbmt-kafka_producer/actions?query=branch%3Amaster)
 
 # Sbmt-KafkaProducer
 
-This gem is used to produce Kafka messages. It is a wrapper over the [waterdrop](https://github.com/karafka/waterdrop) gem, and it is recommended for use as a transport with the [sbmt-outbox](https://github.com/SberMarket-Tech/sbmt-outbox) gem.
+This gem is used to produce Kafka messages. It is a wrapper over the [waterdrop](https://github.com/karafka/waterdrop) gem, and it is recommended for use as a transport with the [sbmt-outbox](https://github.com/Kuper-Tech/sbmt-outbox) gem.
 
 ## Installation
 
@@ -21,7 +21,7 @@ bundle install
 
 ## Demo
 
-Learn how to use this gem and how it works with Ruby on Rails at here https://github.com/SberMarket-Tech/outbox-example-apps
+Learn how to use this gem and how it works with Ruby on Rails at here https://github.com/Kuper-Tech/outbox-example-apps
 
 ## Auto configuration
 
@@ -49,7 +49,7 @@ As the result, a sync producer will be created.
 
 ### Outbox producer
 
-To generate an Outbox producer for use with Gem [sbmt-Outbox](https://github.com/SberMarket-Tech/sbmt-outbox), run the following command:
+To generate an Outbox producer for use with Gem [sbmt-Outbox](https://github.com/Kuper-Tech/sbmt-outbox), run the following command:
 
 ```shell
 rails g kafka_producer:outbox_producer SomeOutboxItem
@@ -66,20 +66,20 @@ default: &default
   # see more options at https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb
   wait_on_queue_full: true
   max_payload_size: 1000012
-  max_wait_timeout: 5
-  wait_timeout: 0.005
+  max_wait_timeout_ms: 60000
   auth:
     kind: plaintext
   kafka:
     servers: "kafka:9092" # required
     max_retries: 2 # optional, default: 2
     required_acks: -1 # optional, default: -1
-    ack_timeout: 1 # in seconds, optional, default: 1
-    retry_backoff: 1 # in seconds, optional, default: 1
-    connect_timeout: 1 # in seconds, optional, default: 1
+    ack_timeout: 1000 # in milliseconds, optional, default: 1000
+    retry_backoff: 1000 # in milliseconds, optional, default: 1000
+    connect_timeout: 2000 # in milliseconds, optional, default: 2000
+    message_timeout: 55000 # in milliseconds, optional, default: 55000
     kafka_config: # low-level custom Kafka options
       queue.buffering.max.messages: 1
-      queue.buffering.max.ms: 10_000
+      queue.buffering.max.ms: 10000
 
 development:
   <<: *default

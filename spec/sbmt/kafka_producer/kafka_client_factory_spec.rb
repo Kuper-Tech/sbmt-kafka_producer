@@ -29,27 +29,27 @@ describe Sbmt::KafkaProducer::KafkaClientFactory do
   end
 
   describe ".configure_client" do
-    let(:logger) { instance_double(Logger) }
-
-    before do
-      allow(Sbmt::KafkaProducer).to receive(:logger).and_return(logger)
-    end
-
     it "configures the client with the correct options" do
-      seed_brokers = "kafka://localhost:9092"
-      connect_timeout = "10s"
+      # rubocop:disable Style/HashSyntax
+      kafka_opts = {
+        message_timeout: 54000,
+        "queue.buffering.max.messages": 14,
+        "ack_timeout" => 1555,
+        "queue.buffering.max.ms" => 1345
+      }
+      # rubocop:enable Style/HashSyntax
 
-      ConnectionPool::Wrapper.new do |wrapper|
-        wrapper.with do |producer|
-          configure_client(producer)
-          expect(producer.config.deliver).to be(true)
-          expect(producer.config.logger).to eq(logger)
-          expect(producer.config.wait_on_queue_full).to be(false)
-          expect(producer.config.kafka).to include(
-            "bootstrap.servers": seed_brokers.sub("kafka://", ""),
-            "producer.connect.timeout.ms": connect_timeout.delete_suffix("s").to_i * 1000
-          )
-        end
+      described_class.build(kafka_opts).with do |producer|
+        expect(producer.config.deliver).to be(true)
+        expect(producer.config.logger).to be_instance_of(Sbmt::KafkaProducer::Logger)
+        expect(producer.config.wait_on_queue_full).to be(true)
+        expect(producer.config.max_wait_timeout).to eq(60000)
+        expect(producer.config.kafka).to include(
+          "bootstrap.servers": "kafka:9092",
+          "message.timeout.ms": 54000,
+          "request.timeout.ms": 1555,
+          "queue.buffering.max.ms": 1345
+        )
       end
     end
   end

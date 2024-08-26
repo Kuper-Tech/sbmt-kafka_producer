@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [3.0.0] - 2024-08-27
+
+## BREAKING
+
+- Drop support for Ruby 2.7
+- Drop support for Rails 6.0
+- Add support for Waterdrop 2.7
+- `wait_timeout` configuration no longer deeded
+- All time-related values are now configured in milliseconds: `connect_timeout`, `ack_timeout`, `retry_backoff`, `max_wait_timeout`, `wait_on_queue_full_timeout`
+
+## Added
+
+- Add `message_timeout` configuration
+
 ## [2.2.3] - 2024-06-20
 
 ### Fixed

@@ -2,6 +2,6 @@
 
 module Sbmt
   module KafkaProducer
-    VERSION = "2.2.3"
+    VERSION = "3.0.0"
   end
 end

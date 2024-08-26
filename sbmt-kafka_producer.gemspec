@@ -6,12 +6,12 @@ Gem::Specification.new do |spec|
   spec.name = "sbmt-kafka_producer"
   spec.license = "MIT"
   spec.version = Sbmt::KafkaProducer::VERSION
-  spec.authors = ["Sbermarket Ruby-Platform Team"]
+  spec.authors = ["Kuper Ruby-Platform Team"]
 
   spec.summary = "Ruby gem for producing Kafka messages"
   spec.description = "This gem is used for producing Kafka messages. It represents a wrapper over Waterdrop gem and is recommended for using as a transport with sbmt-outbox"
-  spec.homepage = "https://github.com/SberMarket-Tech/sbmt-kafka_producer"
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.homepage = "https://github.com/Kuper-Tech/sbmt-kafka_producer"
+  spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
@@ -32,12 +32,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "anyway_config", "~> 2.4"
-  spec.add_dependency "connection_pool"
+  spec.add_dependency "connection_pool", "~> 2.0"
   spec.add_dependency "dry-initializer", "~> 3.0"
-  spec.add_dependency "dry-struct"
-  spec.add_dependency "waterdrop", "~> 2.5", "< 2.7" # BREAKING: undefined method `wait_timeout='' for #<Karafka::Core::Configurable::Node`
+  spec.add_dependency "dry-struct", "~> 1.5"
+  spec.add_dependency "waterdrop", "~> 2.7", "< 2.8"
   spec.add_dependency "zeitwerk", "~> 2.6"
-  spec.add_dependency "yabeda", ">= 0.11"
+  spec.add_dependency "yabeda", "~> 0.11"
 
   spec.add_development_dependency "appraisal", ">= 2.4"
   spec.add_development_dependency "bundler", ">= 2.1"
@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "opentelemetry-common", ">= 0.17.0"
   spec.add_development_dependency "opentelemetry-instrumentation-base", ">= 0.17.0"
   spec.add_development_dependency "rake", ">= 13.0"
-  spec.add_development_dependency "rails", ">= 6.0"
+  spec.add_development_dependency "rails", ">= 6.1"
   spec.add_development_dependency "rspec", ">= 3.0"
   spec.add_development_dependency "rspec_junit_formatter", ">= 0.6"
   spec.add_development_dependency "rspec-rails", ">= 4.0"

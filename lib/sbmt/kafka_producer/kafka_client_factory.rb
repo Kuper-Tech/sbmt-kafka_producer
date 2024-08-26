@@ -15,13 +15,13 @@ module Sbmt
           end
         end
 
-        def build(kafka = {})
-          return default_client if kafka.empty?
+        def build(kafka_options = {})
+          return default_client if kafka_options.empty?
 
-          fetch_client(kafka) do
+          fetch_client(kafka_options) do
             ConnectionPool::Wrapper.new do
               WaterDrop::Producer.new do |config|
-                configure_client(config, kafka)
+                configure_client(config, kafka_options)
               end
             end
           end
@@ -29,8 +29,8 @@ module Sbmt
 
         private
 
-        def fetch_client(kafka)
-          key = Digest::SHA1.hexdigest(Marshal.dump(kafka))
+        def fetch_client(kafka_options)
+          key = Digest::SHA1.hexdigest(Marshal.dump(kafka_options))
           return CLIENTS_REGISTRY[key] if CLIENTS_REGISTRY.key?(key)
 
           CLIENTS_REGISTRY_MUTEX.synchronize do
@@ -49,22 +49,16 @@ module Sbmt
           kafka_config.wait_on_queue_full = config.wait_on_queue_full if config.wait_on_queue_full.present?
           kafka_config.max_payload_size = config.max_payload_size if config.max_payload_size.present?
           kafka_config.max_wait_timeout = config.max_wait_timeout if config.max_wait_timeout.present?
-          kafka_config.wait_timeout = config.wait_timeout if config.wait_timeout.present?
           kafka_config.wait_on_queue_full_timeout = config.wait_on_queue_full_timeout if config.wait_on_queue_full_timeout.present?
 
           kafka_config.monitor.subscribe(config.metrics_listener_class.classify.constantize.new)
         end
 
         def custom_kafka_config(kafka_options)
-          result = {}
-
-          result["socket.connection.setup.timeout.ms"] = kafka_options["connect_timeout"].to_f * 1000 if kafka_options.key?("connect_timeout")
-          result["request.timeout.ms"] = kafka_options["ack_timeout"].to_f * 1000 if kafka_options.key?("ack_timeout")
-          result["request.required.acks"] = kafka_options["required_acks"] if kafka_options.key?("required_acks")
-          result["message.send.max.retries"] = kafka_options["max_retries"] if kafka_options.key?("max_retries")
-          result["retry.backoff.ms"] = kafka_options["retry_backoff"].to_f * 1000 if kafka_options.key?("retry_backoff")
-
-          result
+          kafka_options = kafka_options.symbolize_keys
+          short_options = kafka_options.extract!(*Config::Kafka::KAFKA_CONFIG_KEYS_REMAP.keys)
+          cfg = short_options.transform_keys(Config::Kafka::KAFKA_CONFIG_KEYS_REMAP)
+          kafka_options.merge!(cfg)
         end
 
         def config
