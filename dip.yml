@@ -1,7 +1,7 @@
 version: '7'
 
 environment:
-  RUBY_VERSION: '3.2'
+  RUBY_VERSION: '3.3'
 
 compose:
   files:
@@ -35,14 +35,14 @@ interaction:
     subcommands:
       all:
         command: bundle exec appraisal rspec
-      rails-6.0:
-        command: bundle exec appraisal rails-6.0 rspec
       rails-6.1:
         command: bundle exec appraisal rails-6.1 rspec
       rails-7.0:
         command: bundle exec appraisal rails-7.0 rspec
       rails-7.1:
         command: bundle exec appraisal rails-7.1 rspec
+      rails-7.2:
+        command: bundle exec appraisal rails-7.2 rspec
 
   rubocop:
     description: Run Ruby linter

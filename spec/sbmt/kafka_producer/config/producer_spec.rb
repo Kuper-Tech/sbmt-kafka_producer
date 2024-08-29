@@ -19,7 +19,8 @@ describe Sbmt::KafkaProducer::Config::Producer, type: :config do
         "request.timeout.ms": 1000,
         "request.required.acks": -1,
         "message.send.max.retries": 2,
-        "retry.backoff.ms": 1000
+        "retry.backoff.ms": 1000,
+        "message.timeout.ms": 55000
       }
     end
 
@@ -35,9 +36,9 @@ describe Sbmt::KafkaProducer::Config::Producer, type: :config do
             # loaded from kafka_producer.yml
             "message.send.max.retries": 2,
             "request.required.acks": -1,
-            "request.timeout.ms": 1000.0,
-            "retry.backoff.ms": 1000.0,
-            "socket.connection.setup.timeout.ms": 1000.0,
+            "request.timeout.ms": 1000,
+            "retry.backoff.ms": 1000,
+            "socket.connection.setup.timeout.ms": 2000,
             # arbitrary parameters for section kafka_config file kafka_producer.yml
             "queue.buffering.max.messages": 1,
             "queue.buffering.max.ms": 10000

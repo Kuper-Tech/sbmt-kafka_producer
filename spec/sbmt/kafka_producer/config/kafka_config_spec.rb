@@ -3,7 +3,8 @@
 describe Sbmt::KafkaProducer::Config::Kafka, type: :config do
   let(:kafka_config_defaults) do
     {
-      "socket.connection.setup.timeout.ms": 1000,
+      "socket.connection.setup.timeout.ms": 2000,
+      "message.timeout.ms": 55000,
       "request.timeout.ms": 1000,
       "request.required.acks": -1,
       "message.send.max.retries": 2,

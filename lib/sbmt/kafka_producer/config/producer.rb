@@ -28,7 +28,7 @@ module Sbmt
         config_name :kafka_producer
 
         attr_config :ignore_kafka_error, :deliver, :wait_on_queue_full,
-          :max_payload_size, :max_wait_timeout, :wait_timeout,
+          :max_payload_size, :max_wait_timeout,
           :wait_on_queue_full_timeout,
           auth: {}, kafka: {},
           logger_class: "::Sbmt::KafkaProducer::Logger",
@@ -37,7 +37,7 @@ module Sbmt
         coerce_types ignore_kafka_error: :boolean,
           deliver: :boolean, wait_on_queue_full: :boolean,
           max_payload_size: :integer, max_wait_timeout: :integer,
-          wait_timeout: :float, wait_on_queue_full_timeout: :float
+          wait_on_queue_full_timeout: :integer
         coerce_types kafka: coerce_to(Kafka)
         coerce_types auth: coerce_to(Auth)
 
