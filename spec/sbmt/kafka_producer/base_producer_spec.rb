@@ -28,25 +28,41 @@ describe Sbmt::KafkaProducer::BaseProducer do
       label: nil,
       wait: delivery_report)
   end
+  let(:logger) { ActiveSupport::TaggedLogging.new(Logger.new($stdout)) }
+  let(:options) { {seed_brokers: "kafka://kafka:9092"} }
 
   before do
     allow(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:default_client).and_return(client)
+    allow(Sbmt::KafkaProducer).to receive(:logger).and_return(logger)
   end
 
   describe "#sync_publish" do
-    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
-
     context "when payload is successfully delivered" do
       before do
         allow(client).to receive(:produce_sync).with(
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(delivery_report)
+        ).and_return(delivery_report, 0.1)
       end
 
       it "produces the payload via the client and returns true" do
         expect(producer.sync_publish(payload, options)).to be(true)
+      end
+
+      it "logs the success message with correct tags" do
+        expect(logger).to receive(:tagged).with(hash_including(
+          kafka: hash_including(
+            topic: "my_topic",
+            partition: 0,
+            offset: 0,
+            produce_duration_ms: kind_of(Numeric)
+          )
+        )).and_yield
+
+        expect(logger).to receive(:info).with("Message has been successfully sent to Kafka")
+
+        producer.sync_publish(payload, options)
       end
     end
 
@@ -71,7 +87,9 @@ describe Sbmt::KafkaProducer::BaseProducer do
         end
 
         it "raises an error" do
-          expect(Sbmt::KafkaProducer.logger).to receive(:error).with(/KAFKA ERROR: StandardError Second Exception. TestWrapError First Exception/)
+          expect(logger).to receive(:tagged).with(include(:stacktrace)).and_yield
+          expect(logger).to receive(:error).with(/KAFKA ERROR: StandardError Second Exception. TestWrapError First Exception/)
+
           expect(producer.sync_publish(payload, options)).to be(false)
         end
       end
@@ -79,19 +97,32 @@ describe Sbmt::KafkaProducer::BaseProducer do
   end
 
   describe "#sync_publish!" do
-    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
-
     context "when payload is successfully delivered" do
       before do
         allow(client).to receive(:produce_sync).with(
           payload: payload,
           topic: "test_topic",
           seed_brokers: "kafka://kafka:9092"
-        ).and_return(delivery_report)
+        ).and_return(delivery_report, 0.2)
       end
 
       it "produces the payload via the client and returns true" do
         expect(producer.sync_publish!(payload, options)).to be(true)
+      end
+
+      it "logs the success message with correct tags" do
+        expect(logger).to receive(:tagged).with(hash_including(
+          kafka: hash_including(
+            topic: "my_topic",
+            partition: 0,
+            offset: 0,
+            produce_duration_ms: kind_of(Numeric)
+          )
+        )).and_yield
+
+        expect(logger).to receive(:info).with("Message has been successfully sent to Kafka")
+
+        producer.sync_publish!(payload, options)
       end
     end
 
@@ -107,8 +138,6 @@ describe Sbmt::KafkaProducer::BaseProducer do
   end
 
   describe "#async_publish" do
-    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
-
     context "when payload is successfully delivered" do
       before do
         allow(client).to receive(:produce_async).with(
@@ -144,7 +173,9 @@ describe Sbmt::KafkaProducer::BaseProducer do
         end
 
         it "raises an error" do
-          expect(Sbmt::KafkaProducer.logger).to receive(:error).with(/KAFKA ERROR: StandardError Second Exception. TestWrapError First Exception/)
+          expect(logger).to receive(:tagged).with(include(:stacktrace)).and_yield
+          expect(logger).to receive(:error).with(/KAFKA ERROR: StandardError Second Exception. TestWrapError First Exception/)
+
           expect(producer.async_publish(payload, options)).to be(false)
         end
       end
@@ -152,8 +183,6 @@ describe Sbmt::KafkaProducer::BaseProducer do
   end
 
   describe "#async_publish!" do
-    let(:options) { {seed_brokers: "kafka://kafka:9092"} }
-
     context "when payload is successfully delivered" do
       before do
         allow(client).to receive(:produce_async).with(
