@@ -66,7 +66,7 @@ default: &default
   # see more options at https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb
   wait_on_queue_full: true
   max_payload_size: 1000012
-  max_wait_timeout_ms: 60000
+  max_wait_timeout: 60000
   auth:
     kind: plaintext
   kafka:
@@ -77,9 +77,9 @@ default: &default
     retry_backoff: 1000 # in milliseconds, optional, default: 1000
     connect_timeout: 2000 # in milliseconds, optional, default: 2000
     message_timeout: 55000 # in milliseconds, optional, default: 55000
-    kafka_config: # low-level custom Kafka options
-      queue.buffering.max.messages: 1
-      queue.buffering.max.ms: 10000
+    # kafka_config: # optional, low-level custom Kafka options (see https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
+    #   queue.buffering.max.messages: 100000
+    #   queue.buffering.max.ms: 5
 
 development:
   <<: *default
