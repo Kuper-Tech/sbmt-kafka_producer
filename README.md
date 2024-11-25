@@ -62,7 +62,6 @@ The `config/kafka_producer.yml` file is the main configuration for this gem.
 ```yaml
 default: &default
   deliver: true
-  ignore_kafka_error: true
   # see more options at https://github.com/karafka/waterdrop/blob/master/lib/waterdrop/config.rb
   wait_on_queue_full: true
   max_payload_size: 1000012

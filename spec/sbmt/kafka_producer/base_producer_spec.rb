@@ -77,10 +77,6 @@ describe Sbmt::KafkaProducer::BaseProducer do
       end
 
       context "when multiple exception" do
-        before do
-          allow_any_instance_of(described_class).to receive(:ignore_kafka_errors?).and_return(false)
-        end
-
         let(:error) do
           cause = StandardError.new("Second Exception")
           TestWrapError.new("First Exception", cause)
@@ -163,10 +159,6 @@ describe Sbmt::KafkaProducer::BaseProducer do
       end
 
       context "when multiple exception" do
-        before do
-          allow_any_instance_of(described_class).to receive(:ignore_kafka_errors?).and_return(false)
-        end
-
         let(:error) do
           cause = StandardError.new("Second Exception")
           TestWrapError.new("First Exception", cause)
