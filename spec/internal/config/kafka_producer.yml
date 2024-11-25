@@ -3,7 +3,6 @@ default: &default
   wait_on_queue_full: true
   max_payload_size: 1000012
   max_wait_timeout: 60000
-  ignore_kafka_error: true
   auth:
     kind: plaintext
   kafka:

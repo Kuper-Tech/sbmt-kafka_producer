@@ -75,13 +75,7 @@ module Sbmt
         result
       end
 
-      def ignore_kafka_errors?
-        config.ignore_kafka_error.to_s == "true"
-      end
-
       def log_error(error)
-        return true if ignore_kafka_errors?
-
         log_tags = {stacktrace: error.backtrace.join("\n")}
 
         logger.tagged(log_tags) do
