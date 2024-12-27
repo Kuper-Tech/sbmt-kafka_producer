@@ -22,7 +22,7 @@ tests:
       - RUBY_VERSION: ['3.0', '3.1', '3.2', '3.3']
   before_script:
     - gem sources --remove https://rubygems.org/
-    - gem sources --add ${NEXUS_PUBLIC_SOURCE_URL}
+    - gem sources --add ${RUBYGEMS_PUBLIC_SOURCE}
     - bin/setup
   script:
     - bundle exec appraisal rspec --format RspecJunitFormatter --out test-results/rspec_$RUBY_VERSION.xml --format documentation
