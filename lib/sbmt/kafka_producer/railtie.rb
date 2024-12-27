@@ -3,7 +3,7 @@
 module Sbmt
   module KafkaProducer
     class Railtie < Rails::Railtie
-      initializer "sbmt_kafka_producer_yabeda.configure_rails_initialization" do
+      config.before_initialize do
         YabedaConfigurer.configure
       end
 
