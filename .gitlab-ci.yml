@@ -5,18 +5,24 @@ include:
 
 lint:
   stage: test
-  image: dreg.sbmt.io/dhub/library/ruby:3.1
+  image: ${BUILD_CONF_HARBOR_REGISTRY}/dhub/library/ruby:3.1
+  tags:
+    - paas-tests
   script:
     - bundle install
     - bundle exec rubocop
 
 tests:
   stage: test
-  image: dreg.sbmt.io/dhub/library/ruby:$RUBY_VERSION
+  image: ${BUILD_CONF_HARBOR_REGISTRY}/dhub/library/ruby:$RUBY_VERSION
+  tags:
+    - paas-tests
   parallel:
     matrix:
       - RUBY_VERSION: ['2.7', '3.0', '3.1']
   before_script:
+    - gem sources --remove https://rubygems.org/
+    - gem sources --add https://nexus.sbmt.io/repository/rubygems/
     - gem install bundler -v 2.3.26
     - bin/setup
   script:
