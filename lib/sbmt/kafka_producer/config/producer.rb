@@ -41,8 +41,8 @@ module Sbmt
         coerce_types auth: coerce_to(Auth)
 
         def to_kafka_options
-          kafka.to_kafka_options
-            .merge(auth.to_kafka_options)
+          auth.to_kafka_options
+            .merge(kafka.to_kafka_options)
         end
       end
     end

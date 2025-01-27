@@ -106,6 +106,18 @@ auth:
   sasl_mechanism: SCRAM-SHA-512
 ```
 
+If you need to use another variant, use the low-level custom Kafka options `kafka_config:` of `config/kafka_producer.yml`. These options will overwrite the options in the auth section.
+
+Example of SASL_SSL protocol auth via `kafka_config`:
+
+```yaml
+kafka_config:
+  security.protocol: SASL_SSL
+  sasl.username: user
+  sasl.password: pwd
+  ssl.ca.pem: ca_cert
+  sasl.mechanism: SCRAM-SHA-512
+```
 ### `kafka` config section
 
 The `servers` key is required and should be in rdkafka format: without `kafka://` prefix, for example: `srv1:port1,srv2:port2,...`.
