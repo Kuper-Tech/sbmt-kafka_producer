@@ -6,6 +6,7 @@ require "pathname"
 ENGINE_ROOT = Pathname.new(File.expand_path("..", __dir__))
 
 require "spec_helper"
+require "logger"
 require "combustion"
 
 begin
