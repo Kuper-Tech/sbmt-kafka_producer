@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [3.2.2] - 2025-01-27
+
+### Fixed
+
+- Kafka configuration was overwritten with the default authorization options (#2)
+
 ## [3.2.1] - 2024-12-26
 
 ### Fixed
