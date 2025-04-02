@@ -4,16 +4,14 @@ module Sbmt
   module KafkaProducer
     module Instrumentation
       class OpenTelemetryTracer
+        delegate :enabled?, to: :class
+
         class << self
           def enabled?
             !!@enabled
           end
 
           attr_writer :enabled
-        end
-
-        def enabled?
-          self.class.enabled?
         end
 
         def call(message)
