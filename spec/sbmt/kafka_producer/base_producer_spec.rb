@@ -9,8 +9,14 @@ class TestWrapError < WaterDrop::Errors::ProduceError
   end
 end
 
+class MyMiddleware
+  def call(payload, options)
+    yield
+  end
+end
+
 describe Sbmt::KafkaProducer::BaseProducer do
-  let(:producer) { described_class.new(client: client, topic: topic) }
+  let(:producer) { described_class.new(client: client, topic: topic, middlewares: middlewares) }
   let(:client) { instance_double(WaterDrop::Producer) }
   let(:topic) { "test_topic" }
   let(:payload) { {message: "payload"} }
@@ -30,6 +36,7 @@ describe Sbmt::KafkaProducer::BaseProducer do
   end
   let(:logger) { ActiveSupport::TaggedLogging.new(Logger.new($stdout)) }
   let(:options) { {seed_brokers: "kafka://kafka:9092"} }
+  let(:middlewares) { [] }
 
   before do
     allow(Sbmt::KafkaProducer::KafkaClientFactory).to receive(:default_client).and_return(client)
@@ -63,6 +70,30 @@ describe Sbmt::KafkaProducer::BaseProducer do
         expect(logger).to receive(:info).with("Message has been successfully sent to Kafka")
 
         producer.sync_publish(payload, options)
+      end
+
+      context "when used middlewares" do
+        let(:middlewares) { [MyMiddleware] }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :sync)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(MyMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.sync_publish(payload, options)
+        end
+      end
+
+      context "when used global middlewares" do
+        let(:producer) { described_class.new(client: client, topic: topic) }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :sync)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(TestGlobalMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.sync_publish(payload, options)
+        end
       end
     end
 
@@ -120,6 +151,18 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
         producer.sync_publish!(payload, options)
       end
+
+      context "when used middlewares" do
+        let(:middlewares) { [MyMiddleware] }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :sync)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(MyMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.sync_publish(payload, options)
+        end
+      end
     end
 
     context "when delivery fails with Kafka::DeliveryFailed" do
@@ -145,6 +188,30 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
       it "produces the payload via the client and returns true" do
         expect(producer.async_publish(payload, options)).to be(true)
+      end
+
+      context "when used middlewares" do
+        let(:middlewares) { [MyMiddleware] }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :async)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(MyMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.async_publish(payload, options)
+        end
+      end
+
+      context "when used global middlewares" do
+        let(:producer) { described_class.new(client: client, topic: topic) }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :async)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(TestGlobalMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.async_publish(payload, options)
+        end
       end
     end
 
@@ -186,6 +253,18 @@ describe Sbmt::KafkaProducer::BaseProducer do
 
       it "produces the payload via the client and returns true" do
         expect(producer.async_publish!(payload, options)).to be(true)
+      end
+
+      context "when used middlewares" do
+        let(:middlewares) { [MyMiddleware] }
+        let(:middleware_options) do
+          options.merge(topic: topic, producing_type: :async)
+        end
+
+        it "calls middlewares" do
+          expect_any_instance_of(MyMiddleware).to receive(:call).with(payload, middleware_options).and_call_original
+          producer.async_publish(payload, options)
+        end
       end
     end
 

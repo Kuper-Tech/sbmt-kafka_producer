@@ -20,9 +20,6 @@ AllCops:
   TargetRubyVersion: 2.7
   TargetRailsVersion: 6.0
 
-RSpec/FilePath:
-  Enabled: false
-
 RSpec/VerifiedDoubles:
   Exclude:
     - spec/**/*_spec.rb
@@ -32,3 +29,7 @@ Style/SingleLineMethods:
 
 Style/EmptyMethod:
   Enabled: false
+
+Rails/Exit:
+  Exclude:
+    - spec/rails_helper.rb
