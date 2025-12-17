@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [3.3.0] - 2025-12-05
+
+### Added
+
+- Added option `middlewares` to add middleware when producing a message
+
 ## [3.2.3] - 2025-04-02
 
 ### Fixed

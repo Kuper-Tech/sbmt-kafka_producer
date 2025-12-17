@@ -153,6 +153,32 @@ outbox_items:
         kafka: # optional kafka options
           required_acks: -1
 ```
+## Middlewares
+
+Middleware is code configured to run before/after a message is produced.
+
+To add middleware, specify it in the configuration
+
+```ruby
+# config/initializers/kafka_producer.rb
+
+Sbmt::KafkaProducer.middlewares.push(
+  MyMiddleware
+)
+
+# path/to/middlewares
+
+class MyMiddleware
+  def call(payload, options)
+    "Before producing"
+    result = yield
+    "After producing"
+
+    result
+  end
+end
+```
+⚠️ note the method must return the result
 
 ## Usage
 

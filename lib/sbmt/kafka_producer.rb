@@ -18,6 +18,10 @@ module Sbmt
       def logger
         @logger ||= Logger.new
       end
+
+      def middlewares
+        @middlewares ||= []
+      end
     end
     class Error < StandardError; end
   end

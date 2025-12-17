@@ -8,12 +8,13 @@ module Sbmt
       MSG_SUCCESS = "Message has been successfully sent to Kafka"
 
       option :client, default: -> { KafkaClientFactory.default_client }
+      option :middlewares, default: -> { Sbmt::KafkaProducer.middlewares }
       option :topic
 
       def sync_publish!(payload, options = {})
         report, produce_duration = around_publish do
           measure_time do
-            client.produce_sync(payload: payload, **options.merge(topic: topic))
+            do_produce(:sync, payload, options.merge(topic: topic))
           end
         end
         log_success(report, produce_duration)
@@ -30,7 +31,7 @@ module Sbmt
 
       def async_publish!(payload, options = {})
         around_publish do
-          client.produce_async(payload: payload, **options.merge(topic: topic))
+          do_produce(:async, payload, options.merge(topic: topic))
         end
         true
       end
@@ -44,6 +45,35 @@ module Sbmt
       end
 
       private
+
+      def do_produce(type, payload, options)
+        call_middlewares(type, payload, options) do
+          if type == :sync
+            client.produce_sync(payload: payload, **options)
+          else
+            client.produce_async(payload: payload, **options)
+          end
+        end
+      end
+
+      def call_middlewares(type, payload, options)
+        return yield if middlewares.empty?
+
+        chain = middlewares.map { |middleware_class| middleware_class.new }
+
+        traverse_chain = proc do
+          if chain.empty?
+            yield
+          else
+            chain.shift.call(
+              payload,
+              options.deep_dup.merge(producing_type: type),
+              &traverse_chain
+            )
+          end
+        end
+        traverse_chain.call
+      end
 
       def logger
         ::Sbmt::KafkaProducer.logger
