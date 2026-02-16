@@ -20,6 +20,10 @@ module Sbmt
       def add(...)
         logger.add(...)
       end
+
+      def tagged(...)
+        logger.tagged(...)
+      end
     end
   end
 end

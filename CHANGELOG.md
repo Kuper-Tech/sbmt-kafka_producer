@@ -13,6 +13,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [2.3.0] - 2026-02-10
+
+### Added
+
+- Added option `middlewares` to add middleware when producing a message
+- For synchronous messages and errors, we place logs in tags
+
+### Changed
+
+- Update README
+
+### Fixed
+
+- Fix initialize yabeda metrics
+- Properly resolve constant `YabedaConfigurer`
+
 ## [2.2.3] - 2024-06-20
 
 ### Fixed

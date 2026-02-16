@@ -5,14 +5,19 @@ module Sbmt
     class BaseProducer
       extend Dry::Initializer
 
+      MSG_SUCCESS = "Message has been successfully sent to Kafka"
+
       option :client, default: -> { KafkaClientFactory.default_client }
+      option :middlewares, default: -> { Sbmt::KafkaProducer.middlewares }
       option :topic
 
       def sync_publish!(payload, options = {})
-        report = around_publish do
-          client.produce_sync(payload: payload, **options.merge(topic: topic))
+        report, produce_duration = around_publish do
+          measure_time do
+            do_produce(:sync, payload, options.merge(topic: topic))
+          end
         end
-        log_success(report)
+        log_success(report, produce_duration)
         true
       end
 
@@ -26,7 +31,7 @@ module Sbmt
 
       def async_publish!(payload, options = {})
         around_publish do
-          client.produce_async(payload: payload, **options.merge(topic: topic))
+          do_produce(:async, payload, options.merge(topic: topic))
         end
         true
       end
@@ -40,6 +45,35 @@ module Sbmt
       end
 
       private
+
+      def do_produce(type, payload, options)
+        call_middlewares(type, payload, options) do
+          if type == :sync
+            client.produce_sync(payload: payload, **options)
+          else
+            client.produce_async(payload: payload, **options)
+          end
+        end
+      end
+
+      def call_middlewares(type, payload, options)
+        return yield if middlewares.empty?
+
+        chain = middlewares.map { |middleware_class| middleware_class.new }
+
+        traverse_chain = proc do
+          if chain.empty?
+            yield
+          else
+            chain.shift.call(
+              payload,
+              options.deep_dup.merge(producing_type: type),
+              &traverse_chain
+            )
+          end
+        end
+        traverse_chain.call
+      end
 
       def logger
         ::Sbmt::KafkaProducer.logger
@@ -78,12 +112,19 @@ module Sbmt
       def log_error(error)
         return true if ignore_kafka_errors?
 
-        logger.error "KAFKA ERROR: #{format_exception_error(error)}\n#{error.backtrace.join("\n")}"
+        log_tags = {stacktrace: error.backtrace.join("\n")}
+
+        logger.tagged(log_tags) do
+          logger.send(:error, "KAFKA ERROR: #{format_exception_error(error)}")
+        end
+
         ErrorTracker.error(error)
       end
 
-      def log_success(report)
-        logger.info "Message has been successfully sent to Kafka - topic: #{report.topic_name}, partition: #{report.partition}, offset: #{report.offset}"
+      def log_success(report, produce_duration)
+        log_tags = {kafka: log_tags(report, produce_duration)}
+
+        log_with_tags(log_tags)
       end
 
       def format_exception_error(error)
@@ -98,6 +139,33 @@ module Sbmt
 
       def with_cause?(error)
         error.respond_to?(:cause) && error.cause.present?
+      end
+
+      def log_tags(report, produce_duration)
+        {
+          topic: report.topic_name,
+          partition: report.partition,
+          offset: report.offset,
+          produce_duration_ms: produce_duration
+        }
+      end
+
+      def log_with_tags(log_tags)
+        return unless logger.respond_to?(:tagged)
+
+        logger.tagged(log_tags) do
+          logger.send(:info, MSG_SUCCESS)
+        end
+      end
+
+      def measure_time
+        start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        result = yield
+        end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+        elapsed_time = end_time - start_time
+
+        [result, elapsed_time]
       end
 
       def config

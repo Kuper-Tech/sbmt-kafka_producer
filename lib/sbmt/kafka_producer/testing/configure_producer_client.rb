@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class FakeWaterDropClient
+  Report = Struct.new(:topic_name, :partition, :offset)
+
   def produce_sync(*)
-    # no op
+    Report.new("fake_topic", 0, 0)
   end
 
   def produce_async(*)
