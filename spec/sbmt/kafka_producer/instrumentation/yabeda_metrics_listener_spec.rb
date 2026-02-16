@@ -78,8 +78,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
 
     context "when error type is librdkafka.dispatch_error" do
       let(:event) { Karafka::Core::Monitoring::Event.new("error.occurred", topic: "topic", type: "librdkafka.dispatch_error") }
-
-      tags = {client: "waterdrop", topic: "topic"}
+      let(:tags) { {client: "waterdrop", topic: "topic"} }
 
       it "increments producer error counter" do
         expect { described_class.new.on_error_occurred(event) }
@@ -92,8 +91,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
   describe ".on_message_produced_sync" do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_produced_sync", message: topic, time: 25) }
-
-    tags = {client: "waterdrop", topic: "topic"}
+    let(:tags) { {client: "waterdrop", topic: "topic"} }
 
     it "reports produced sync message metrics" do
       expect { described_class.new.on_message_produced_sync(event) }
@@ -106,8 +104,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
   describe ".on_message_produced_async" do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_produced_async", message: topic, time: 25) }
-
-    tags = {client: "waterdrop", topic: "topic"}
+    let(:tags) { {client: "waterdrop", topic: "topic"} }
 
     it "reports produced async message metrics" do
       expect { described_class.new.on_message_produced_async(event) }
@@ -129,8 +126,7 @@ describe Sbmt::KafkaProducer::Instrumentation::YabedaMetricsListener do
   describe ".on_message_acknowledged" do
     let(:topic) { OpenStruct.new({topic: "topic"}) }
     let(:event) { Karafka::Core::Monitoring::Event.new("on_message_acknowledged", topic: "topic") }
-
-    tags = {client: "waterdrop", topic: "topic"}
+    let(:tags) { {client: "waterdrop", topic: "topic"} }
 
     it "increments produced acknowledged metrics" do
       expect { described_class.new.on_message_acknowledged(event) }

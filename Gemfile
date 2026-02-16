@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
+source ENV.fetch("RUBYGEMS_PUBLIC_SOURCE", "https://rubygems.org")
 
 gemspec
 

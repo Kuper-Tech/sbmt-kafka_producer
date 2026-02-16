@@ -3,8 +3,9 @@
 module Sbmt
   module KafkaProducer
     class Railtie < Rails::Railtie
-      initializer "sbmt_kafka_producer_yabeda.configure_rails_initialization" do
-        YabedaConfigurer.configure
+      config.before_initialize do
+        require "sbmt/kafka_producer/yabeda_configurer"
+        ::Sbmt::KafkaProducer::YabedaConfigurer.configure
       end
 
       initializer "sbmt_kafka_producer_opentelemetry_init.configure_rails_initialization",
