@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Ruby gem for producing Kafka messages"
   spec.description = "This gem is used for producing Kafka messages. It represents a wrapper over Waterdrop gem and is recommended for using as a transport with sbmt-outbox"
   spec.homepage = "https://github.com/Kuper-Tech/sbmt-kafka_producer"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["allowed_push_host"] = ENV.fetch("NEXUS_URL", "https://rubygems.org")
 
@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "connection_pool", "~> 2.0"
   spec.add_dependency "dry-initializer", "~> 3.0"
   spec.add_dependency "dry-struct", "~> 1.5"
-  spec.add_dependency "waterdrop", "~> 2.7", "< 2.8"
+  spec.add_dependency "waterdrop", ">= 2.8.14", "< 3.0.0"
   spec.add_dependency "zeitwerk", "~> 2.6"
   spec.add_dependency "yabeda", "~> 0.11"
 
