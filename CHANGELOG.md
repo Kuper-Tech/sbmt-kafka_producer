@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+## [3.4.0] - 2026-05-26
+
+## BREAKING
+
+- Drop support for Ruby 3.0/3.1
+
 ## [3.3.0] - 2025-12-05
 
 ### Added
